@@ -46,7 +46,7 @@ type ResponseData struct {
 	Message    string
 	Action     string
 	StatusCode int
-	Content    json.RawMessage
+	Content    interface{}
 }
 
 // SendResponse ...
@@ -64,10 +64,16 @@ func (data *ResponseData) SendResponse(w http.ResponseWriter) {
 		SessionID: w.Header().Get("SessionId"),
 	}
 
+	jsonContent, err := json.Marshal(data.Content)
+	if err != nil {
+		log.Println(err)
+		ErrorResponse("Lo sentimos", "No es posible responder en este momento, favor intentar mas tarde...", w)
+	}
+
 	// build response body
 	responseBody := ResponseBody{
 		Info:    info,
-		Content: data.Content,
+		Content: jsonContent,
 	}
 
 	json.NewEncoder(w).Encode(responseBody)
@@ -91,7 +97,7 @@ type Success struct {
 	Message    string
 	StatusCode int
 	Action     string
-	Content    json.RawMessage
+	Content    interface{}
 }
 
 // Error error response type the value is "error"
@@ -100,7 +106,7 @@ type Error struct {
 	Message    string
 	StatusCode int
 	Action     string
-	Content    json.RawMessage
+	Content    interface{}
 }
 
 // Warning warning response type the value is "warning"
@@ -109,7 +115,7 @@ type Warning struct {
 	Message    string
 	StatusCode int
 	Action     string
-	Content    json.RawMessage
+	Content    interface{}
 }
 
 // Informative info response type the value is "info"
@@ -118,7 +124,7 @@ type Informative struct {
 	Message    string
 	StatusCode int
 	Action     string
-	Content    json.RawMessage
+	Content    interface{}
 }
 
 // SetResponse success ...
