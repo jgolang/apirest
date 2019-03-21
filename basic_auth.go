@@ -14,7 +14,7 @@ func BasicAuth(next http.HandlerFunc) http.HandlerFunc {
 		auth := strings.SplitN(r.Header.Get("Authorization"), " ", 2)
 
 		if len(auth) != 2 || auth[0] != "Basic" {
-			http.Error(w, "authorization failed", http.StatusUnauthorized)
+			ErrorResponse("No autorizado", "", w)
 			return
 		}
 
@@ -22,7 +22,7 @@ func BasicAuth(next http.HandlerFunc) http.HandlerFunc {
 		pair := strings.SplitN(string(payload), ":", 2)
 
 		if len(pair) != 2 || !validate(pair[0], pair[1]) {
-			http.Error(w, "authorization failed", http.StatusUnauthorized)
+			ErrorResponse("No autorizado", "", w)
 			return
 		}
 
