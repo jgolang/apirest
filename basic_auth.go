@@ -2,7 +2,6 @@ package apigolang
 
 import (
 	"encoding/base64"
-	"log"
 	"net/http"
 	"strings"
 )
@@ -33,7 +32,6 @@ func BasicAuth(next http.HandlerFunc) http.HandlerFunc {
 
 func validate(username, password string) bool {
 	if username == "test" && password == "test" {
-		log.Println("Si pasa esta cochinada")
 		return true
 	}
 	return false

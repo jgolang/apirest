@@ -50,3 +50,31 @@ func MiddlewaresChain(mw ...Middleware) Middleware {
 		}
 	}
 }
+
+// RequestHeaderJson validate header Content-Type, is required and equal to application/json
+func RequestHeaderJson(next http.HandlerFunc) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+
+		contentType := r.Header.Get("Content-Type")
+
+		if len(contentType) == 0 {
+			ErrorResponse("Petición inválida", "", w)
+			return
+		}
+
+		if contentType != "application/json" {
+			ErrorResponse("Campos requeridos", "", w)
+			return
+		}
+
+		next.ServeHTTP(w, r)
+	}
+}
+
+func RequestHeaderSession(next http.HandlerFunc) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		sessionID := r.Header.Get("SessionId")
+		w.Header().Set("SessionId", sessionID)
+		next.ServeHTTP(w, r)
+	}
+}
