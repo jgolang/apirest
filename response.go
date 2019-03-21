@@ -221,7 +221,7 @@ func SuccesResponse(title, message string, w http.ResponseWriter) {
 }
 
 // SuccesContentResponse ...
-func SuccesContentResponse(title, message string, content json.RawMessage, w http.ResponseWriter) {
+func SuccesContentResponse(title, message string, content interface{}, w http.ResponseWriter) {
 	success := Success{
 		Title:   title,
 		Message: message,
