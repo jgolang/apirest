@@ -190,3 +190,40 @@ func ErrorResponse(title, message string, w http.ResponseWriter) {
 	}
 	SendResponse(err, w)
 }
+
+// SuccesResponse ...
+func SuccesResponse(title, message string, w http.ResponseWriter) {
+	success := Success{
+		Title:   title,
+		Message: message,
+	}
+	SendResponse(success, w)
+}
+
+// SuccesContentResponse ...
+func SuccesContentResponse(title, message string, content json.RawMessage, w http.ResponseWriter) {
+	success := Success{
+		Title:   title,
+		Message: message,
+		Content: content,
+	}
+	SendResponse(success, w)
+}
+
+// InformativeResponse ...
+func InformativeResponse(title, message string, w http.ResponseWriter) {
+	info := Informative{
+		Title:   title,
+		Message: message,
+	}
+	SendResponse(info, w)
+}
+
+// WarningResponse ...
+func WarningResponse(title, message string, w http.ResponseWriter) {
+	warning := Warning{
+		Title:   title,
+		Message: message,
+	}
+	SendResponse(warning, w)
+}
