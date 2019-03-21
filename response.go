@@ -64,10 +64,15 @@ func (data *ResponseData) SendResponse(w http.ResponseWriter) {
 		SessionID: w.Header().Get("SessionId"),
 	}
 
-	jsonContent, err := json.Marshal(data.Content)
-	if err != nil {
-		log.Println(err)
-		ErrorResponse("Lo sentimos", "No es posible responder en este momento, favor intentar mas tarde...", w)
+	var jsonContent []byte
+	var err error
+
+	if data.Content != nil {
+		jsonContent, err = json.Marshal(data.Content)
+		if err != nil {
+			log.Println(err)
+			ErrorResponse("Lo sentimos", "No es posible responder en este momento, favor intentar mas tarde...", w)
+		}
 	}
 
 	// build response body
