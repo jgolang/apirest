@@ -8,6 +8,20 @@ import (
 	"net/http"
 )
 
+// ResponseType contains all the response types identiers
+type ResponseType string
+
+const (
+	// ErrorType error response type the value is "error"
+	ErrorType ResponseType = "error"
+	// WarningType warning response type the value is "warning"
+	WarningType ResponseType = "warning"
+	// InformativeType info response type the value is "info"
+	InformativeType ResponseType = "info"
+	// SuccessType success response type the value is "success"
+	SuccessType ResponseType = "success"
+)
+
 // ResponseBody response body structure
 // contains the info section, with the response type and the messages for users
 // and the content section, with the required data for the request
@@ -18,16 +32,16 @@ type ResponseBody struct {
 
 // ResponseInfo response body info section
 type ResponseInfo struct {
-	Type      string `json:"type"`
-	Title     string `json:"title,omitempty"`
-	Message   string `json:"message,omitempty"`
-	Action    string `json:"action,omitempty"`
-	SessionID string `json:"sessionId,omitempty"`
+	Type      ResponseType `json:"type"`
+	Title     string       `json:"title,omitempty"`
+	Message   string       `json:"message,omitempty"`
+	Action    string       `json:"action,omitempty"`
+	SessionID string       `json:"sessionId,omitempty"`
 }
 
 // ResponseData ...
 type ResponseData struct {
-	Type       string
+	Type       ResponseType
 	Title      string
 	Message    string
 	Action     string
@@ -113,7 +127,7 @@ func (succes Success) setResponse() (response ResponseData) {
 		Title:      succes.Title,
 		Message:    succes.Message,
 		StatusCode: 200,
-		Type:       "Success",
+		Type:       SuccessType,
 		Action:     succes.Action,
 		Content:    succes.Content,
 	}
@@ -129,7 +143,7 @@ func (err Error) setResponse() (response ResponseData) {
 		Title:      err.Title,
 		Message:    err.Message,
 		StatusCode: 400,
-		Type:       "Error",
+		Type:       ErrorType,
 		Action:     err.Action,
 		Content:    err.Content,
 	}
@@ -145,7 +159,7 @@ func (warning Warning) setResponse() (response ResponseData) {
 		Title:      warning.Title,
 		Message:    warning.Message,
 		StatusCode: 200,
-		Type:       "Warning",
+		Type:       WarningType,
 		Action:     warning.Action,
 		Content:    warning.Content,
 	}
@@ -161,7 +175,7 @@ func (info Informative) setResponse() (response ResponseData) {
 		Title:      info.Title,
 		Message:    info.Message,
 		StatusCode: 200,
-		Type:       "Informative",
+		Type:       InformativeType,
 		Action:     info.Action,
 		Content:    info.Content,
 	}
