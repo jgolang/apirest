@@ -32,6 +32,7 @@ func (request *Request) UnmarshalBody() Response {
 	//  Unmarshal JSON to golang struct and validate
 	unmErr := json.Unmarshal(bodyRequest, &request.JSONStruct)
 	if unmErr != nil {
+		log.Println(unmErr)
 		return Error{
 			Title:   "Estructura JSON invalida",
 			Message: "No se ha leído la estrucutura...",
