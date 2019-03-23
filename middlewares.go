@@ -1,7 +1,10 @@
 package apigolang
 
 import (
+	"bytes"
 	"encoding/json"
+	"io/ioutil"
+	"log"
 	"net/http"
 )
 
@@ -75,6 +78,28 @@ func RequestHeaderSession(next http.HandlerFunc) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		sessionID := r.Header.Get("SessionId")
 		w.Header().Set("SessionId", sessionID)
+		next.ServeHTTP(w, r)
+	}
+}
+
+func GetRequestBodyMiddleware(next http.HandlerFunc) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		if r.Method == http.MethodPost || r.Method == http.MethodPut || r.Method == http.MethodPatch {
+			// Decode the request body to JSON
+			jsonDecoder := json.NewDecoder(r.Body)
+			var requestContent RequestContent
+
+			parsingRequestContentError := jsonDecoder.Decode(&requestContent)
+
+			if parsingRequestContentError != nil {
+				ErrorResponse("Error interno", "", w)
+				return
+			}
+
+			r.Header.Set("Request-Content", string(requestContent.RequestContent))
+			r.Body = ioutil.NopCloser(bytes.NewBuffer(requestContent.RequestContent))
+			log.Println(r)
+		}
 		next.ServeHTTP(w, r)
 	}
 }
