@@ -201,6 +201,22 @@ func NewResponse(response Response) ResponseData {
 	return response.setResponse()
 }
 
+// NewErrorResponse ...
+func NewErrorResponse(title, message string) Error {
+	return Error{
+		Title:   title,
+		Message: message,
+	}
+}
+
+// NewSuccessResponse ...
+func NewSuccessResponse(title, message string) Success {
+	return Success{
+		Title:   title,
+		Message: message,
+	}
+}
+
 // SendResponse ...
 func SendResponse(response Response, w http.ResponseWriter) {
 	res := response.setResponse()
