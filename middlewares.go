@@ -65,10 +65,10 @@ func RequestHeaderJson(next http.HandlerFunc) http.HandlerFunc {
 			return
 		}
 
-		if contentType != "application/json" {
-			ErrorResponse("Campos requeridos", "", w)
-			return
-		}
+		// if contentType != "application/json" {
+		// 	ErrorResponse("Campos requeridos", "", w)
+		// 	return
+		// }
 
 		next.ServeHTTP(w, r)
 	}
