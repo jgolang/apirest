@@ -4,8 +4,9 @@ import (
 	"bytes"
 	"encoding/json"
 	"io/ioutil"
-	"log"
 	"net/http"
+
+	"github.com/josuegiron/log"
 )
 
 // ResponseType contains all the response types identiers
