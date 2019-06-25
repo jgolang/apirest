@@ -1,4 +1,4 @@
-module github.com/josuegiron/apigolang
+module github.com/josuegiron/api-golang
 
 go 1.12
 
