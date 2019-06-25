@@ -1,4 +1,4 @@
-package apigolang
+package apigo
 
 import (
 	"encoding/base64"

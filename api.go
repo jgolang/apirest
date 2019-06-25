@@ -1,4 +1,4 @@
-package apigolang
+package apigo
 
 import (
 	"github.com/josuegiron/log"
