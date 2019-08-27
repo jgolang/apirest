@@ -4,6 +4,6 @@ import (
 	"github.com/josuegiron/log"
 )
 
-func init() {
+func Init() {
 	log.ChangeCallerSkip(2)
 }
