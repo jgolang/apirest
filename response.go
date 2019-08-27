@@ -7,6 +7,7 @@ import (
 	"net/http"
 
 	"github.com/josuegiron/log"
+	"go.uber.org/zap"
 )
 
 // ResponseType contains all the response types identiers
@@ -71,7 +72,9 @@ func (data *ResponseData) SendResponse(w http.ResponseWriter) {
 	if data.Content != nil {
 		jsonContent, err = json.Marshal(data.Content)
 		if err != nil {
-			log.Println(err)
+			logger := zap.S()
+			defer logger.Sync()
+			logger.Error(err)
 			ErrorResponse("Lo sentimos", "No es posible responder en este momento, favor intentar mas tarde...", w)
 		}
 	}

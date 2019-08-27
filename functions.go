@@ -1,7 +1,7 @@
 package apigo
 
 import (
-	"github.com/josuegiron/log"
+	"go.uber.org/zap"
 )
 
 // Check doc...
@@ -15,7 +15,9 @@ func Check(err error) bool {
 // Checkp doc...
 func Checkp(err error) bool {
 	if err != nil {
-		log.Error(err)
+		logger := zap.S()
+		defer logger.Sync()
+		logger.Error(err)
 		return true
 	}
 	return false
