@@ -55,8 +55,8 @@ func MiddlewaresChain(mw ...Middleware) Middleware {
 	}
 }
 
-// RequestHeaderJson validate header Content-Type, is required and equal to application/json
-func RequestHeaderJson(next http.HandlerFunc) http.HandlerFunc {
+// RequestHeaderJSON validate header Content-Type, is required and equal to application/json
+func RequestHeaderJSON(next http.HandlerFunc) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 
 		contentType := r.Header.Get("Content-Type")
@@ -75,6 +75,7 @@ func RequestHeaderJson(next http.HandlerFunc) http.HandlerFunc {
 	}
 }
 
+// RequestHeaderSession doc ...
 func RequestHeaderSession(next http.HandlerFunc) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		sessionID := r.Header.Get("SessionId")
@@ -83,6 +84,7 @@ func RequestHeaderSession(next http.HandlerFunc) http.HandlerFunc {
 	}
 }
 
+// GetRequestBodyMiddleware doc ...
 func GetRequestBodyMiddleware(next http.HandlerFunc) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		if r.Method == http.MethodPost || r.Method == http.MethodPut || r.Method == http.MethodPatch {
