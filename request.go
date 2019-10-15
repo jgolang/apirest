@@ -4,15 +4,10 @@ import (
 	"net/http"
 )
 
-// Tools doc ...
-type Tools interface {
-}
-
 //Request ...
 type Request interface {
 	GetSessionInfo(r *http.Request) (Request, Response)
 	UnmarshalBody(r *http.Request, v interface{}) Response
-	Tools
 }
 
 // NewRequest ...
@@ -38,6 +33,5 @@ func NewRequestBody(req Request, r *http.Request, v interface{}) (Request, Respo
 	if resp.setResponse().StatusCode != 0 {
 		return req, resp
 	}
-
 	return req, resp
 }

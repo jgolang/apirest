@@ -41,8 +41,9 @@ func (t ToolBasic) GetURLParamInt(paramName string) (int, Response) {
 
 //GetURLParamInt64 ...
 func (t ToolBasic) GetURLParamInt64(paramName string) (int64, Response) {
+
 	params := mux.Vars(t.R)
-	param, err := strconv.ParseInt(params[paramName], 10, 64) //  Get user id
+	param, err := strconv.ParseInt(params[paramName], 10, 64)
 	if Checkp(err) {
 		return 0, Error{
 			Title:   "Se esperaba un parametro tipo int 64",
@@ -50,11 +51,13 @@ func (t ToolBasic) GetURLParamInt64(paramName string) (int64, Response) {
 		}
 	}
 	return param, nil
+
 }
 
 // GetQueryParamInt64 ...
 func (t ToolBasic) GetQueryParamInt64(paramName string) (int64, Response) {
-	param, err := strconv.ParseInt(t.R.URL.Query().Get(paramName), 10, 64) //  Get user id
+
+	param, err := strconv.ParseInt(t.R.URL.Query().Get(paramName), 10, 64)
 	if Checkp(err) {
 		return 0, Error{
 			Title:   "Se esperaba un parametro tipo int 64",
@@ -62,4 +65,13 @@ func (t ToolBasic) GetQueryParamInt64(paramName string) (int64, Response) {
 		}
 	}
 	return param, nil
+
+}
+
+// GetQueryParamString ...
+func (t ToolBasic) GetQueryParamString(paramName string) (string, Response) {
+
+	param := t.R.URL.Query().Get(paramName)
+	return param, nil
+
 }
