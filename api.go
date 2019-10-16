@@ -1,7 +1,7 @@
-package apigo
+package apirest
 
 import (
-	"github.com/josuegiron/log"
+	"github.com/jgolang/log"
 )
 
 // Init doc ...

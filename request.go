@@ -1,4 +1,4 @@
-package apigo
+package apirest
 
 import (
 	"net/http"

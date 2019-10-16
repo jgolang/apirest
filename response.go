@@ -1,4 +1,4 @@
-package apigo
+package apirest
 
 import (
 	"bytes"
@@ -6,7 +6,7 @@ import (
 	"io/ioutil"
 	"net/http"
 
-	"github.com/josuegiron/log"
+	"github.com/jgolang/log"
 	"go.uber.org/zap"
 )
 
