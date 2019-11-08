@@ -10,7 +10,7 @@ import (
 // ResponseType contains all the response types identiers
 type ResponseType string
 
-const (
+var (
 	// ErrorType error response type the value is "error"
 	ErrorType ResponseType = "error"
 	// WarningType warning response type the value is "warning"
@@ -81,6 +81,12 @@ func SendResponse(response ResponseData, w http.ResponseWriter) {
 			defer logger.Sync()
 			logger.Error(err)
 			ErrorResponse("Lo sentimos", "No es posible responder en este momento, favor intentar mas tarde...", w)
+			resp := ResponseData{
+				Title:   "Lo sentimos",
+				Message: "No es posible responder en este momento, favor intentar mas tarde...",
+			}
+			resp.SendAsError(w)
+			return
 		}
 	}
 
@@ -113,21 +119,21 @@ func (response ResponseData) SendAsSuccess(w http.ResponseWriter) {
 
 // SendAsError doc ...
 func (response ResponseData) SendAsError(w http.ResponseWriter) {
-	response.Type = SuccessType
-	response.StatusCode = 200
+	response.Type = ErrorType
+	response.StatusCode = 400
 	SendResponse(response, w)
 }
 
 // SendAsWarning doc ...
 func (response ResponseData) SendAsWarning(w http.ResponseWriter) {
-	response.Type = SuccessType
+	response.Type = WarningType
 	response.StatusCode = 200
 	SendResponse(response, w)
 }
 
 // SendAsInfo doc ...
 func (response ResponseData) SendAsInfo(w http.ResponseWriter) {
-	response.Type = SuccessType
+	response.Type = InformativeType
 	response.StatusCode = 200
 	SendResponse(response, w)
 }
