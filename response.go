@@ -111,12 +111,25 @@ func (response ResponseData) SendAsSuccess(w http.ResponseWriter) {
 	SendResponse(response, w)
 }
 
-// SetSuccessResponse doc ...
-func SetSuccessResponse(title, message string, content interface{}, w http.ResponseWriter) {
+// SendAsError doc ...
+func (response ResponseData) SendAsError(w http.ResponseWriter) {
+	response.Type = SuccessType
+	response.StatusCode = 200
+	SendResponse(response, w)
+}
 
-	response := NewSuccessResponse(title, message, content)
-	SendResponse(w)
+// SendAsWarning doc ...
+func (response ResponseData) SendAsWarning(w http.ResponseWriter) {
+	response.Type = SuccessType
+	response.StatusCode = 200
+	SendResponse(response, w)
+}
 
+// SendAsInfo doc ...
+func (response ResponseData) SendAsInfo(w http.ResponseWriter) {
+	response.Type = SuccessType
+	response.StatusCode = 200
+	SendResponse(response, w)
 }
 
 // // NewResponse ...
