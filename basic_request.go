@@ -4,17 +4,25 @@ import (
 	"encoding/json"
 	"io/ioutil"
 	"net/http"
-	"strconv"
 )
 
 // RequestBasic doc ...
 type RequestBasic struct {
 	JSONStruct interface{}
 	SessionID  string
-	UserID     int64
+	UserID     string
 	TraceID    string
 	Tools      ToolBasic
 }
+
+// SessionID doc ...
+var SessionID = "SessionID"
+
+// UserID doc ...
+var UserID = "UserID"
+
+// TraceID doc ..
+var TraceID = "event.TraceID"
 
 //UnmarshalBody ...
 func (request RequestBasic) UnmarshalBody(r *http.Request, v interface{}) Response {
@@ -39,7 +47,7 @@ func (request RequestBasic) UnmarshalBody(r *http.Request, v interface{}) Respon
 	if Checkp(unmErr) {
 		return Error{
 			Title:   "Estructura JSON invalida",
-			Message: "No se ha leído la estrucutura...",
+			Message: "No se ha leído la estructura...",
 		}
 	}
 	return nil
@@ -47,7 +55,7 @@ func (request RequestBasic) UnmarshalBody(r *http.Request, v interface{}) Respon
 
 //GetSessionID get session from user
 func (request *RequestBasic) GetSessionID(r *http.Request) Response {
-	request.SessionID = r.Header.Get("SessionID")
+	request.SessionID = r.Header.Get(SessionID)
 	if request.SessionID == "" {
 		return Error{
 			Title:   "¡Error de session!",
@@ -59,25 +67,23 @@ func (request *RequestBasic) GetSessionID(r *http.Request) Response {
 
 //GetUserID get id user session
 func (request *RequestBasic) GetUserID(r *http.Request) Response {
-	userID, err := strconv.ParseInt(r.Header.Get("UserID"), 10, 64)
-	if Checkp(err) {
+	request.UserID = r.Header.Get(UserID)
+	if request.UserID == "" {
 		return Error{
 			Title:   "¡Error de session!",
 			Message: "No se ha obtenido el id del usuario",
 		}
 	}
-
-	request.UserID = userID
 	return nil
 }
 
 //GetTraceID doc
 func (request *RequestBasic) GetTraceID(r *http.Request) Response {
-	request.TraceID = r.Header.Get("event.TraceID")
+	request.TraceID = r.Header.Get(TraceID)
 	if request.TraceID == "" {
 		return Error{
 			Title:   "¡Error de session!",
-			Message: "No se ha obtenido el id de la trasa",
+			Message: "No se ha obtenido el id del evento",
 		}
 	}
 	return nil

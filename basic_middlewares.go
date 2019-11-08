@@ -2,56 +2,36 @@ package apirest
 
 import (
 	"bytes"
+	"encoding/base64"
 	"encoding/json"
 	"io/ioutil"
 	"net/http"
+	"strings"
 
 	"github.com/jgolang/log"
 )
 
-// Middleware provides a convenient mechanism for filtering HTTP requests
-// entering the application. It returns a new handler which may perform various
-// operations and should finish by calling the next HTTP handler.
-type Middleware func(next http.HandlerFunc) http.HandlerFunc
+// BasicAuth ...
+func BasicAuth(next http.HandlerFunc) http.HandlerFunc {
 
-// EncryptedBody struct used to parse the encrypted body
-type EncryptedBody struct {
-	Data string `json:"data"`
-}
+	return func(w http.ResponseWriter, r *http.Request) {
 
-// Info request info section fields for encrypted requests
-type Info struct {
-	DeviceUUID  string `json:"deviceUUID"`
-	DeviceType  string `json:"deviceType"`
-	OS          string `json:"os"`
-	OSVersion   string `json:"osVersion"`
-	OSTimezone  int    `json:"osTimezone"`
-	AppLanguage string `json:"appLanguage"`
-	AppVersion  string `json:"appVersion"`
-	SessionID   string `json:"sessionId"`
-}
+		auth := strings.SplitN(r.Header.Get("Authorization"), " ", 2)
 
-// RequestInfo struct used to parse the request info section
-type RequestInfo struct {
-	Info Info `json:"info"`
-}
-
-// RequestContent struct used to parse the request content section
-type RequestContent struct {
-	RequestContent json.RawMessage `json:"requestContent"`
-}
-
-// MiddlewaresChain provides syntactic sugar to create a new middleware
-// which will be the result of chaining the ones received as parameters.
-func MiddlewaresChain(mw ...Middleware) Middleware {
-	return func(final http.HandlerFunc) http.HandlerFunc {
-		return func(w http.ResponseWriter, r *http.Request) {
-			last := final
-			for i := len(mw) - 1; i >= 0; i-- {
-				last = mw[i](last)
-			}
-			last(w, r)
+		if len(auth) != 2 || auth[0] != "Basic" {
+			ErrorResponse("No autorizado", "", w)
+			return
 		}
+
+		payload, _ := base64.StdEncoding.DecodeString(auth[1])
+		pair := strings.SplitN(string(payload), ":", 2)
+
+		if len(pair) != 2 || !validate(pair[0], pair[1]) {
+			ErrorResponse("No autorizado", "", w)
+			return
+		}
+
+		next(w, r)
 	}
 }
 

@@ -19,6 +19,7 @@ func NewRequest(req Request, r *http.Request) (Request, Response) {
 	}
 
 	return req, resp
+
 }
 
 // NewRequestBody ...
@@ -33,5 +34,7 @@ func NewRequestBody(req Request, r *http.Request, v interface{}) (Request, Respo
 	if resp.setResponse().StatusCode != 0 {
 		return req, resp
 	}
+
 	return req, resp
+
 }

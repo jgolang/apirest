@@ -1,12 +1,9 @@
 package apirest
 
 import (
-	"bytes"
 	"encoding/json"
-	"io/ioutil"
 	"net/http"
 
-	"github.com/jgolang/log"
 	"go.uber.org/zap"
 )
 
@@ -23,6 +20,14 @@ const (
 	// SuccessType success response type the value is "success"
 	SuccessType ResponseType = "success"
 )
+
+// Response doc ...
+type Response interface {
+	SendAsError(w http.ResponseWriter)
+	SendAsSuccess(w http.ResponseWriter)
+	SendAsWarning(w http.ResponseWriter)
+	SendAsInfo(w http.ResponseWriter)
+}
 
 // ResponseBody response body structure
 // contains the info section, with the response type and the messages for users
@@ -48,29 +53,29 @@ type ResponseData struct {
 	Message    string
 	Action     string
 	StatusCode int
+	SessionID  string
 	Content    interface{}
 }
 
 // SendResponse ...
-func (data *ResponseData) SendResponse(w http.ResponseWriter) {
+func SendResponse(response ResponseData, w http.ResponseWriter) {
 	// set response headers and status code
 	w.Header().Set("Content-Type", "application/json")
-	w.WriteHeader(data.StatusCode)
+	w.WriteHeader(response.StatusCode)
 
-	// build response body info section
 	info := ResponseInfo{
-		Type:      data.Type,
-		Title:     data.Title,
-		Message:   data.Message,
-		Action:    data.Action,
-		SessionID: w.Header().Get("SessionId"),
+		Type:      response.Type,
+		Title:     response.Title,
+		Message:   response.Message,
+		Action:    response.Action,
+		SessionID: response.SessionID,
 	}
 
 	var jsonContent []byte
-	var err error
 
-	if data.Content != nil {
-		jsonContent, err = json.Marshal(data.Content)
+	var err error
+	if response.Content != nil {
+		jsonContent, err = json.Marshal(response.Content)
 		if err != nil {
 			logger := zap.S()
 			defer logger.Sync()
@@ -79,7 +84,6 @@ func (data *ResponseData) SendResponse(w http.ResponseWriter) {
 		}
 	}
 
-	// build response body
 	responseBody := ResponseBody{
 		Info:    info,
 		Content: jsonContent,
@@ -87,188 +91,41 @@ func (data *ResponseData) SendResponse(w http.ResponseWriter) {
 
 	json.NewEncoder(w).Encode(responseBody)
 
-	log.Println(w) //	Log
-
-	encryptedResponseJSON, _ := json.Marshal(responseBody)
-	body := ioutil.NopCloser(bytes.NewBuffer(encryptedResponseJSON))
-
-	log.Println(body) //	Log
-}
-
-// Response ...
-type Response interface {
-	setResponse() ResponseData
-}
-
-// Success success response type the value is "success"
-type Success struct {
-	Title      string
-	Message    string
-	StatusCode int
-	Action     string
-	Content    interface{}
-}
-
-// Error error response type the value is "error"
-type Error struct {
-	Title      string
-	Message    string
-	StatusCode int
-	Action     string
-	Content    interface{}
-}
-
-// Warning warning response type the value is "warning"
-type Warning struct {
-	Title      string
-	Message    string
-	StatusCode int
-	Action     string
-	Content    interface{}
-}
-
-// Informative info response type the value is "info"
-type Informative struct {
-	Title      string
-	Message    string
-	StatusCode int
-	Action     string
-	Content    interface{}
-}
-
-// SetResponse success ...
-func (succes Success) setResponse() (response ResponseData) {
-	response = ResponseData{
-		Title:      succes.Title,
-		Message:    succes.Message,
-		StatusCode: 200,
-		Type:       SuccessType,
-		Action:     succes.Action,
-		Content:    succes.Content,
-	}
-	if succes.StatusCode != 0 {
-		response.StatusCode = succes.StatusCode
-	}
-	return
-}
-
-// SetResponse error ...
-func (err Error) setResponse() (response ResponseData) {
-	response = ResponseData{
-		Title:      err.Title,
-		Message:    err.Message,
-		StatusCode: 400,
-		Type:       ErrorType,
-		Action:     err.Action,
-		Content:    err.Content,
-	}
-	if err.StatusCode != 0 {
-		response.StatusCode = err.StatusCode
-	}
-	return response
-}
-
-// SetResponse warning ...
-func (warning Warning) setResponse() (response ResponseData) {
-	response = ResponseData{
-		Title:      warning.Title,
-		Message:    warning.Message,
-		StatusCode: 200,
-		Type:       WarningType,
-		Action:     warning.Action,
-		Content:    warning.Content,
-	}
-	if warning.StatusCode != 0 {
-		response.StatusCode = warning.StatusCode
-	}
-	return
-}
-
-// SetResponse informative ...
-func (info Informative) setResponse() (response ResponseData) {
-	response = ResponseData{
-		Title:      info.Title,
-		Message:    info.Message,
-		StatusCode: 200,
-		Type:       InformativeType,
-		Action:     info.Action,
-		Content:    info.Content,
-	}
-	if info.StatusCode != 0 {
-		response.StatusCode = info.StatusCode
-	}
-	return
-}
-
-// NewResponse ...
-func NewResponse(response Response) ResponseData {
-	return response.setResponse()
-}
-
-// NewErrorResponse ...
-func NewErrorResponse(title, message string) Error {
-	return Error{
-		Title:   title,
-		Message: message,
-	}
 }
 
 // NewSuccessResponse ...
-func NewSuccessResponse(title, message string) Success {
-	return Success{
-		Title:   title,
-		Message: message,
+func NewSuccessResponse(title, message string, content interface{}) Response {
+	return ResponseData{
+		Title:      title,
+		Message:    message,
+		Content:    content,
+		StatusCode: 200,
+		Type:       SuccessType,
 	}
 }
 
-// SendResponse ...
-func SendResponse(response Response, w http.ResponseWriter) {
-	res := response.setResponse()
-	res.SendResponse(w)
+// SendAsSuccess doc ...
+func (response ResponseData) SendAsSuccess(w http.ResponseWriter) {
+	response.Type = SuccessType
+	response.StatusCode = 200
+	SendResponse(response, w)
 }
 
-// ErrorResponse ...
-func ErrorResponse(title, message string, w http.ResponseWriter) {
-	err := Error{
-		Title:   title,
-		Message: message,
-	}
-	SendResponse(err, w)
+// SetSuccessResponse doc ...
+func SetSuccessResponse(title, message string, content interface{}, w http.ResponseWriter) {
+
+	response := NewSuccessResponse(title, message, content)
+	SendResponse(w)
+
 }
 
-// SuccesResponse ...
-func SuccesResponse(title, message string, w http.ResponseWriter) {
-	success := Success{
-		Title:   title,
-		Message: message,
-	}
-	SendResponse(success, w)
-}
+// // NewResponse ...
+// func NewResponse(response Response) ResponseData {
+// 	return response.setResponse()
+// }
 
-// SuccesContentResponse ...
-func SuccesContentResponse(title, message string, content interface{}, w http.ResponseWriter) {
-	success := Success{
-		Title:   title,
-		Message: message,
-		Content: content,
-	}
-	SendResponse(success, w)
-}
-
-// InformativeResponse ...
-func InformativeResponse(title, message string, w http.ResponseWriter) {
-	info := Informative{
-		Title:   title,
-		Message: message,
-	}
-	SendResponse(info, w)
-}
-
-// WarningResponse ...
-func WarningResponse(title, message string, w http.ResponseWriter) {
-	warning := Warning{
-		Title:   title,
-		Message: message,
-	}
-	SendResponse(warning, w)
-}
+// // SendResponse ...
+// func SendResponse(response Response, w http.ResponseWriter) {
+// 	res := response.setResponse()
+// 	res.SendResponse(w)
+// }
