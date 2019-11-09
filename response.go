@@ -3,8 +3,6 @@ package apirest
 import (
 	"encoding/json"
 	"net/http"
-
-	"go.uber.org/zap"
 )
 
 // ResponseType contains all the response types identiers
@@ -23,18 +21,15 @@ var (
 
 // Response doc ...
 type Response interface {
-	SendAsError(w http.ResponseWriter)
-	SendAsSuccess(w http.ResponseWriter)
-	SendAsWarning(w http.ResponseWriter)
-	SendAsInfo(w http.ResponseWriter)
+	SendResponse(w http.ResponseWriter)
 }
 
 // ResponseBody response body structure
 // contains the info section, with the response type and the messages for users
 // and the content section, with the required data for the request
 type ResponseBody struct {
-	Info    ResponseInfo    `json:"info"`
-	Content json.RawMessage `json:"responseContent,omitempty"`
+	Info    ResponseInfo `json:"info"`
+	Content interface{}  `json:"responseContent,omitempty"`
 }
 
 // ResponseInfo response body info section
@@ -58,7 +53,7 @@ type ResponseData struct {
 }
 
 // SendResponse ...
-func SendResponse(response ResponseData, w http.ResponseWriter) {
+func (response ResponseData) SendResponse(w http.ResponseWriter) {
 	// set response headers and status code
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(response.StatusCode)
@@ -71,28 +66,9 @@ func SendResponse(response ResponseData, w http.ResponseWriter) {
 		SessionID: response.SessionID,
 	}
 
-	var jsonContent []byte
-
-	var err error
-	if response.Content != nil {
-		jsonContent, err = json.Marshal(response.Content)
-		if err != nil {
-			logger := zap.S()
-			defer logger.Sync()
-			logger.Error(err)
-			ErrorResponse("Lo sentimos", "No es posible responder en este momento, favor intentar mas tarde...", w)
-			resp := ResponseData{
-				Title:   "Lo sentimos",
-				Message: "No es posible responder en este momento, favor intentar mas tarde...",
-			}
-			resp.SendAsError(w)
-			return
-		}
-	}
-
 	responseBody := ResponseBody{
 		Info:    info,
-		Content: jsonContent,
+		Content: response.Content,
 	}
 
 	json.NewEncoder(w).Encode(responseBody)
@@ -110,41 +86,47 @@ func NewSuccessResponse(title, message string, content interface{}) Response {
 	}
 }
 
-// SendAsSuccess doc ...
-func (response ResponseData) SendAsSuccess(w http.ResponseWriter) {
-	response.Type = SuccessType
-	response.StatusCode = 200
-	SendResponse(response, w)
+// NewErrorResponse ...
+func NewErrorResponse(title, message string, content interface{}) Response {
+	return ResponseData{
+		Title:      title,
+		Message:    message,
+		Content:    content,
+		StatusCode: 400,
+		Type:       ErrorType,
+	}
 }
 
-// SendAsError doc ...
-func (response ResponseData) SendAsError(w http.ResponseWriter) {
-	response.Type = ErrorType
-	response.StatusCode = 400
-	SendResponse(response, w)
+// NewWarningResponse ...
+func NewWarningResponse(title, message string, content interface{}) Response {
+	return ResponseData{
+		Title:      title,
+		Message:    message,
+		Content:    content,
+		StatusCode: 200,
+		Type:       WarningType,
+	}
 }
 
-// SendAsWarning doc ...
-func (response ResponseData) SendAsWarning(w http.ResponseWriter) {
-	response.Type = WarningType
-	response.StatusCode = 200
-	SendResponse(response, w)
+// NewInfoResponse ...
+func NewInfoResponse(title, message string, content interface{}) Response {
+	return ResponseData{
+		Title:      title,
+		Message:    message,
+		Content:    content,
+		StatusCode: 200,
+		Type:       InformativeType,
+	}
 }
 
-// SendAsInfo doc ...
-func (response ResponseData) SendAsInfo(w http.ResponseWriter) {
-	response.Type = InformativeType
-	response.StatusCode = 200
-	SendResponse(response, w)
+// SendSuccess ...
+func SendSuccess(title, message string, w http.ResponseWriter) {
+	response := NewSuccessResponse(title, message, nil)
+	response.SendResponse(w)
 }
 
-// // NewResponse ...
-// func NewResponse(response Response) ResponseData {
-// 	return response.setResponse()
-// }
-
-// // SendResponse ...
-// func SendResponse(response Response, w http.ResponseWriter) {
-// 	res := response.setResponse()
-// 	res.SendResponse(w)
-// }
+// SendError ...
+func SendError(title, message string, w http.ResponseWriter) {
+	response := NewErrorResponse(title, message, nil)
+	response.SendResponse(w)
+}
