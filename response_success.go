@@ -2,30 +2,50 @@ package apirest
 
 import "net/http"
 
-// NewSuccessResponse ...
-func NewSuccessResponse(title, message string, content interface{}) Response {
-	return Response{
-		Title:   title,
-		Message: message,
-		Content: content,
-	}
+var (
+	// DefaultSuccessTitle doc ...
+	DefaultSuccessTitle = "Congratulations!"
+	// DefaultSuccessMessage doc ..
+	DefaultSuccessMessage = "The request has succeeded!"
+)
+
+// Success success response type the value is "success"
+type Success struct {
+	Title      string
+	Message    string
+	StatusCode int
+	Action     string
+	Content    interface{}
+	ResponseData
 }
 
-// SendSuccessResponse ...
-func SendSuccessResponse(title, message string, w http.ResponseWriter) {
-	success := Success{
-		Title:   title,
-		Message: message,
+// SetResponse success ...
+func (success Success) setResponse() ResponseData {
+
+	if success.Title == "" {
+		success.Title = DefaultSuccessTitle
 	}
-	SendResponse(success, w)
+
+	if success.Message == "" {
+		success.Message = DefaultSuccessMessage
+	}
+
+	if success.StatusCode == 0 {
+		success.StatusCode = http.StatusOK
+	}
+
+	return ResponseData{
+		Title:      success.Title,
+		Message:    success.Message,
+		StatusCode: success.StatusCode,
+		Type:       SuccessType,
+		Action:     success.Action,
+		Content:    success.Content,
+	}
+
 }
 
-// SendSuccessContentResponse ...
-func SendSuccessContentResponse(title, message string, content interface{}, w http.ResponseWriter) {
-	success := Success{
-		Title:   title,
-		Message: message,
-		Content: content,
-	}
+// Send ...
+func (success Success) Send(w http.ResponseWriter) {
 	SendResponse(success, w)
 }

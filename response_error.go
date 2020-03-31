@@ -2,6 +2,13 @@ package apirest
 
 import "net/http"
 
+var (
+	// DefaultErrorTitle doc ...
+	DefaultErrorTitle = "Error response!"
+	// DefaultErrorMessage doc ..
+	DefaultErrorMessage = "The service has not completed the operation!"
+)
+
 // Error error response type the value is "error"
 type Error struct {
 	Title      string
@@ -12,34 +19,33 @@ type Error struct {
 }
 
 // SetResponse error ...
-func (err Error) setResponse() (response ResponseData) {
-	response = ResponseData{
+func (err Error) setResponse() ResponseData {
+
+	if err.Title == "" {
+		err.Title = DefaultErrorTitle
+	}
+
+	if err.Message == "" {
+		err.Message = DefaultErrorMessage
+	}
+
+	if err.StatusCode == 0 {
+		err.StatusCode = http.StatusBadRequest
+
+	}
+
+	return ResponseData{
 		Title:      err.Title,
 		Message:    err.Message,
-		StatusCode: 400,
+		StatusCode: err.StatusCode,
 		Type:       ErrorType,
 		Action:     err.Action,
 		Content:    err.Content,
 	}
-	if err.StatusCode != 0 {
-		response.StatusCode = err.StatusCode
-	}
-	return response
+
 }
 
-// NewErrorResponse ...
-func NewErrorResponse(title, message string) Error {
-	return Error{
-		Title:   title,
-		Message: message,
-	}
-}
-
-// ErrorResponse ...
-func ErrorResponse(title, message string, w http.ResponseWriter) {
-	err := Error{
-		Title:   title,
-		Message: message,
-	}
+// Send ...
+func (err Error) Send(w http.ResponseWriter) {
 	SendResponse(err, w)
 }

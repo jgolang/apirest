@@ -2,9 +2,8 @@ package apirest
 
 import (
 	"encoding/json"
+	"log"
 	"net/http"
-
-	"go.uber.org/zap"
 )
 
 // ResponseType contains all the response types identiers
@@ -21,29 +20,32 @@ var (
 	SuccessType ResponseType = "success"
 )
 
-// Response doc ...
-type Response interface {
-	SendAsError(w http.ResponseWriter)
-	SendAsSuccess(w http.ResponseWriter)
-	SendAsWarning(w http.ResponseWriter)
-	SendAsInfo(w http.ResponseWriter)
-}
-
-// ResponseBody response body structure
+// JSONResponse response body structure
 // contains the info section, with the response type and the messages for users
 // and the content section, with the required data for the request
-type ResponseBody struct {
-	Info    ResponseInfo    `json:"info"`
-	Content json.RawMessage `json:"responseContent,omitempty"`
+type JSONResponse struct {
+	Info    JSONResponseInfo `json:"info"`
+	Content json.RawMessage  `json:"responseContent,omitempty"`
 }
 
-// ResponseInfo response body info section
-type ResponseInfo struct {
+// JSONResponseInfo response body info section
+type JSONResponseInfo struct {
 	Type      ResponseType `json:"type"`
 	Title     string       `json:"title,omitempty"`
 	Message   string       `json:"message,omitempty"`
 	Action    string       `json:"action,omitempty"`
 	SessionID string       `json:"sessionId,omitempty"`
+}
+
+// Response ...
+type Response interface {
+	setResponse() ResponseData
+}
+
+// SendResponse ...
+func SendResponse(response Response, w http.ResponseWriter) {
+	res := response.setResponse()
+	res.SendResponse(w)
 }
 
 // ResponseData ...
@@ -58,12 +60,13 @@ type ResponseData struct {
 }
 
 // SendResponse ...
-func SendResponse(response ResponseData, w http.ResponseWriter) {
+func (response ResponseData) SendResponse(w http.ResponseWriter) {
+
 	// set response headers and status code
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(response.StatusCode)
 
-	info := ResponseInfo{
+	info := JSONResponseInfo{
 		Type:      response.Type,
 		Title:     response.Title,
 		Message:   response.Message,
@@ -77,74 +80,16 @@ func SendResponse(response ResponseData, w http.ResponseWriter) {
 	if response.Content != nil {
 		jsonContent, err = json.Marshal(response.Content)
 		if err != nil {
-			logger := zap.S()
-			defer logger.Sync()
-			logger.Error(err)
-			ErrorResponse("Lo sentimos", "No es posible responder en este momento, favor intentar mas tarde...", w)
-			resp := ResponseData{
-				Title:   "Lo sentimos",
-				Message: "No es posible responder en este momento, favor intentar mas tarde...",
-			}
-			resp.SendAsError(w)
+			log.Fatal(err)
 			return
 		}
 	}
 
-	responseBody := ResponseBody{
+	jsonResponse := JSONResponse{
 		Info:    info,
 		Content: jsonContent,
 	}
 
-	json.NewEncoder(w).Encode(responseBody)
+	json.NewEncoder(w).Encode(jsonResponse)
 
 }
-
-// NewSuccessResponse ...
-func NewSuccessResponse(title, message string, content interface{}) Response {
-	return ResponseData{
-		Title:      title,
-		Message:    message,
-		Content:    content,
-		StatusCode: 200,
-		Type:       SuccessType,
-	}
-}
-
-// SendAsSuccess doc ...
-func (response ResponseData) SendAsSuccess(w http.ResponseWriter) {
-	response.Type = SuccessType
-	response.StatusCode = 200
-	SendResponse(response, w)
-}
-
-// SendAsError doc ...
-func (response ResponseData) SendAsError(w http.ResponseWriter) {
-	response.Type = ErrorType
-	response.StatusCode = 400
-	SendResponse(response, w)
-}
-
-// SendAsWarning doc ...
-func (response ResponseData) SendAsWarning(w http.ResponseWriter) {
-	response.Type = WarningType
-	response.StatusCode = 200
-	SendResponse(response, w)
-}
-
-// SendAsInfo doc ...
-func (response ResponseData) SendAsInfo(w http.ResponseWriter) {
-	response.Type = InformativeType
-	response.StatusCode = 200
-	SendResponse(response, w)
-}
-
-// // NewResponse ...
-// func NewResponse(response Response) ResponseData {
-// 	return response.setResponse()
-// }
-
-// // SendResponse ...
-// func SendResponse(response Response, w http.ResponseWriter) {
-// 	res := response.setResponse()
-// 	res.SendResponse(w)
-// }

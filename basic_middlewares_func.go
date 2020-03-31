@@ -1,7 +1,14 @@
 package apirest
 
+var (
+	// Username doc ...
+	Username = "test"
+	// Password doc ...
+	Password = "test"
+)
+
 func validate(username, password string) bool {
-	if username == "test" && password == "test" {
+	if username == Username && password == Password {
 		return true
 	}
 	return false

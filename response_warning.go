@@ -2,6 +2,13 @@ package apirest
 
 import "net/http"
 
+var (
+	// DefaultWarningTitle doc ...
+	DefaultWarningTitle = "Alert!"
+	// DefaultWarningMessage doc ..
+	DefaultWarningMessage = "The application has been successful but with potential problems!"
+)
+
 // Warning warning response type the value is "warning"
 type Warning struct {
 	Title      string
@@ -12,26 +19,31 @@ type Warning struct {
 }
 
 // SetResponse warning ...
-func (warning Warning) setResponse() (response ResponseData) {
-	response = ResponseData{
+func (warning Warning) setResponse() ResponseData {
+
+	if warning.Title == "" {
+		warning.Title = DefaultWarningTitle
+	}
+
+	if warning.Message == "" {
+		warning.Message = DefaultWarningMessage
+	}
+
+	if warning.StatusCode == 0 {
+		warning.StatusCode = http.StatusOK
+	}
+
+	return ResponseData{
 		Title:      warning.Title,
 		Message:    warning.Message,
-		StatusCode: 200,
+		StatusCode: warning.StatusCode,
 		Type:       WarningType,
 		Action:     warning.Action,
 		Content:    warning.Content,
 	}
-	if warning.StatusCode != 0 {
-		response.StatusCode = warning.StatusCode
-	}
-	return
 }
 
-// SetWarningResponse ...
-func SetWarningResponse(title, message string, w http.ResponseWriter) {
-	warning := Warning{
-		Title:   title,
-		Message: message,
-	}
+// Send ...
+func (warning Warning) Send(w http.ResponseWriter) {
 	SendResponse(warning, w)
 }

@@ -1,14 +1,10 @@
 package apirest
 
 import (
-	"bytes"
 	"encoding/base64"
 	"encoding/json"
-	"io/ioutil"
 	"net/http"
 	"strings"
-
-	"github.com/jgolang/log"
 )
 
 // BasicAuth ...
@@ -19,7 +15,7 @@ func BasicAuth(next http.HandlerFunc) http.HandlerFunc {
 		auth := strings.SplitN(r.Header.Get("Authorization"), " ", 2)
 
 		if len(auth) != 2 || auth[0] != "Basic" {
-			ErrorResponse("No autorizado", "", w)
+			Error{Title: "No autorizado", StatusCode: 401}.Send(w)
 			return
 		}
 
@@ -27,7 +23,7 @@ func BasicAuth(next http.HandlerFunc) http.HandlerFunc {
 		pair := strings.SplitN(string(payload), ":", 2)
 
 		if len(pair) != 2 || !validate(pair[0], pair[1]) {
-			ErrorResponse("No autorizado", "", w)
+			Error{Title: "No autorizado", StatusCode: 401}.Send(w)
 			return
 		}
 
@@ -42,14 +38,14 @@ func RequestHeaderJSON(next http.HandlerFunc) http.HandlerFunc {
 		contentType := r.Header.Get("Content-Type")
 
 		if len(contentType) == 0 {
-			ErrorResponse("Petición inválida", "", w)
+			Error{Message: "Petición inválida!"}.Send(w)
 			return
 		}
 
-		// if contentType != "application/json" {
-		// 	ErrorResponse("Campos requeridos", "", w)
-		// 	return
-		// }
+		if contentType != "application/json" {
+			Error{Message: "El Content-Type no es JSON!"}.Send(w)
+			return
+		}
 
 		next.ServeHTTP(w, r)
 	}
@@ -64,25 +60,27 @@ func RequestHeaderSession(next http.HandlerFunc) http.HandlerFunc {
 	}
 }
 
-// GetRequestBodyMiddleware doc ...
-func GetRequestBodyMiddleware(next http.HandlerFunc) http.HandlerFunc {
+// RequestBody doc ...
+func RequestBody(next http.HandlerFunc) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
+
 		if r.Method == http.MethodPost || r.Method == http.MethodPut || r.Method == http.MethodPatch {
 			// Decode the request body to JSON
 			jsonDecoder := json.NewDecoder(r.Body)
-			var requestContent RequestContent
 
-			parsingRequestContentError := jsonDecoder.Decode(&requestContent)
+			var request JSONRequest
+
+			parsingRequestContentError := jsonDecoder.Decode(&request)
 
 			if parsingRequestContentError != nil {
-				ErrorResponse("Error interno", "", w)
+				Error{Message: "Se requiere cuerpo vacío para utilizar este método!"}.Send(w)
 				return
 			}
 
-			r.Header.Set("Request-Content", string(requestContent.RequestContent))
-			r.Body = ioutil.NopCloser(bytes.NewBuffer(requestContent.RequestContent))
-			log.Println(r)
+			r.Header.Set("Request-Content", string(request.Content))
+
 		}
+
 		next.ServeHTTP(w, r)
 	}
 }

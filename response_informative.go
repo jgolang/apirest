@@ -2,6 +2,13 @@ package apirest
 
 import "net/http"
 
+var (
+	// DefaultInfoTitle doc ...
+	DefaultInfoTitle = "Information!"
+	// DefaultInfoMessage doc ..
+	DefaultInfoMessage = "The request has succeeded!"
+)
+
 // Informative info response type the value is "info"
 type Informative struct {
 	Title      string
@@ -12,26 +19,32 @@ type Informative struct {
 }
 
 // SetResponse informative ...
-func (info Informative) setResponse() (response ResponseData) {
-	response = ResponseData{
+func (info Informative) setResponse() ResponseData {
+
+	if info.Title == "" {
+		info.Title = DefaultInfoTitle
+	}
+
+	if info.Message == "" {
+		info.Message = DefaultInfoMessage
+	}
+
+	if info.StatusCode == 0 {
+		info.StatusCode = http.StatusOK
+	}
+
+	return ResponseData{
 		Title:      info.Title,
 		Message:    info.Message,
-		StatusCode: 200,
+		StatusCode: info.StatusCode,
 		Type:       InformativeType,
 		Action:     info.Action,
 		Content:    info.Content,
 	}
-	if info.StatusCode != 0 {
-		response.StatusCode = info.StatusCode
-	}
-	return
+
 }
 
-// InformativeResponse ...
-func InformativeResponse(title, message string, w http.ResponseWriter) {
-	info := Informative{
-		Title:   title,
-		Message: message,
-	}
+// Send ...
+func (info Informative) Send(w http.ResponseWriter) {
 	SendResponse(info, w)
 }
