@@ -15,14 +15,14 @@ type RequestBasic struct {
 	Tools      ToolBasic
 }
 
-// SessionID doc ...
-var SessionID = "SessionID"
+// SessionIDPayload doc ...
+var SessionIDPayload = "SessionID"
 
-// UserID doc ...
-var UserID = "UserID"
+// UserIDPayload doc ...
+var UserIDPayload = "UserID"
 
-// TraceID doc ..
-var TraceID = "event.TraceID"
+// TraceIDPayload doc ..
+var TraceIDPayload = "event.TraceID"
 
 //UnmarshalBody ...
 func (request RequestBasic) UnmarshalBody(r *http.Request, v interface{}) Response {
@@ -55,7 +55,7 @@ func (request RequestBasic) UnmarshalBody(r *http.Request, v interface{}) Respon
 
 //GetSessionID get session from user
 func (request *RequestBasic) GetSessionID(r *http.Request) Response {
-	request.SessionID = r.Header.Get(SessionID)
+	request.SessionID = r.Header.Get(SessionIDPayload)
 	if request.SessionID == "" {
 		return Error{
 			Title:   "¡Error de session!",
@@ -67,7 +67,7 @@ func (request *RequestBasic) GetSessionID(r *http.Request) Response {
 
 //GetUserID get id user session
 func (request *RequestBasic) GetUserID(r *http.Request) Response {
-	request.UserID = r.Header.Get(UserID)
+	request.UserID = r.Header.Get(UserIDPayload)
 	if request.UserID == "" {
 		return Error{
 			Title:   "¡Error de session!",
@@ -79,7 +79,7 @@ func (request *RequestBasic) GetUserID(r *http.Request) Response {
 
 //GetTraceID doc
 func (request *RequestBasic) GetTraceID(r *http.Request) Response {
-	request.TraceID = r.Header.Get(TraceID)
+	request.TraceID = r.Header.Get(TraceIDPayload)
 	if request.TraceID == "" {
 		return Error{
 			Title:   "¡Error de session!",

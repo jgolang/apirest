@@ -5,6 +5,12 @@ import (
 	"net/http"
 )
 
+// JSONRequest struct used to parse the request content section
+type JSONRequest struct {
+	Info    JSONRequestInfo `json:"info,omitempty"`
+	Content json.RawMessage `json:"requestContent"`
+}
+
 // JSONRequestInfo request info section fields for encrypted requests
 type JSONRequestInfo struct {
 	DeviceUUID  string `json:"deviceUUID"`
@@ -15,12 +21,6 @@ type JSONRequestInfo struct {
 	AppLanguage string `json:"appLanguage"`
 	AppVersion  string `json:"appVersion"`
 	SessionID   string `json:"sessionId"`
-}
-
-// JSONRequest struct used to parse the request content section
-type JSONRequest struct {
-	Info    JSONRequestInfo `json:"info,omitempty"`
-	Content json.RawMessage `json:"requestContent"`
 }
 
 //Request ...
