@@ -20,26 +20,12 @@ var (
 	SuccessType ResponseType = "success"
 )
 
-<<<<<<< HEAD
 // JSONResponse response body structure
 // contains the info section, with the response type and the messages for users
 // and the content section, with the required data for the request
 type JSONResponse struct {
 	Info    JSONResponseInfo `json:"info"`
-	Content json.RawMessage  `json:"responseContent,omitempty"`
-=======
-// Response doc ...
-type Response interface {
-	SendResponse(w http.ResponseWriter)
-}
-
-// ResponseBody response body structure
-// contains the info section, with the response type and the messages for users
-// and the content section, with the required data for the request
-type ResponseBody struct {
-	Info    ResponseInfo `json:"info"`
-	Content interface{}  `json:"responseContent,omitempty"`
->>>>>>> 63a2b798ceea35356b9bc7e319156243075624d4
+	Content interface{}      `json:"responseContent,omitempty"`
 }
 
 // JSONResponseInfo response body info section
@@ -75,10 +61,7 @@ type ResponseData struct {
 
 // SendResponse ...
 func (response ResponseData) SendResponse(w http.ResponseWriter) {
-<<<<<<< HEAD
 
-=======
->>>>>>> 63a2b798ceea35356b9bc7e319156243075624d4
 	// set response headers and status code
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(response.StatusCode)
@@ -91,7 +74,6 @@ func (response ResponseData) SendResponse(w http.ResponseWriter) {
 		SessionID: response.SessionID,
 	}
 
-<<<<<<< HEAD
 	var jsonContent []byte
 
 	var err error
@@ -104,75 +86,12 @@ func (response ResponseData) SendResponse(w http.ResponseWriter) {
 	}
 
 	jsonResponse := JSONResponse{
-=======
-	responseBody := ResponseBody{
->>>>>>> 63a2b798ceea35356b9bc7e319156243075624d4
 		Info:    info,
-		Content: response.Content,
+		Content: jsonContent,
 	}
 
-<<<<<<< HEAD
 	json.NewEncoder(w).Encode(jsonResponse)
 
-}
-=======
-	json.NewEncoder(w).Encode(responseBody)
+	return
 
 }
-
-// NewSuccessResponse ...
-func NewSuccessResponse(title, message string, content interface{}) Response {
-	return ResponseData{
-		Title:      title,
-		Message:    message,
-		Content:    content,
-		StatusCode: 200,
-		Type:       SuccessType,
-	}
-}
-
-// NewErrorResponse ...
-func NewErrorResponse(title, message string, content interface{}) Response {
-	return ResponseData{
-		Title:      title,
-		Message:    message,
-		Content:    content,
-		StatusCode: 400,
-		Type:       ErrorType,
-	}
-}
-
-// NewWarningResponse ...
-func NewWarningResponse(title, message string, content interface{}) Response {
-	return ResponseData{
-		Title:      title,
-		Message:    message,
-		Content:    content,
-		StatusCode: 200,
-		Type:       WarningType,
-	}
-}
-
-// NewInfoResponse ...
-func NewInfoResponse(title, message string, content interface{}) Response {
-	return ResponseData{
-		Title:      title,
-		Message:    message,
-		Content:    content,
-		StatusCode: 200,
-		Type:       InformativeType,
-	}
-}
-
-// SendSuccess ...
-func SendSuccess(title, message string, w http.ResponseWriter) {
-	response := NewSuccessResponse(title, message, nil)
-	response.SendResponse(w)
-}
-
-// SendError ...
-func SendError(title, message string, w http.ResponseWriter) {
-	response := NewErrorResponse(title, message, nil)
-	response.SendResponse(w)
-}
->>>>>>> 63a2b798ceea35356b9bc7e319156243075624d4
