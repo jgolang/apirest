@@ -66,41 +66,43 @@ func GetHeaderValueInt64(key string, r *http.Request) (int64, Response) {
 	return valueInt64, nil
 }
 
-// GetURLParamValueString ...
-func GetURLParamValueString(urlParamName string, r *http.Request) (string, Response) {
+// GetRouteVarValueString ...
+func GetRouteVarValueString(urlParamName string, r *http.Request) (string, Response) {
 	params := Vars(r)
 	value := params[urlParamName]
 	if value == "" {
 		return value, Error{
-			Title:   "Error getting url param!",
-			Message: fmt.Sprintf("The url parameter %v has not been obtained", urlParamName),
+			Title:   "Error getting URL param!",
+			Message: fmt.Sprintf("The URL parameter %v has not been obtained", urlParamName),
 		}
 	}
 	return value, nil
 }
 
-// GetURLParamValueInt ...
-func GetURLParamValueInt(urlParamName string, r *http.Request) (int, Response) {
+// GetRouteVarValueInt ...
+func GetRouteVarValueInt(urlParamName string, r *http.Request) (int, Response) {
 	params := Vars(r)
 	param, err := strconv.Atoi(params[urlParamName]) //  Get user id
-	if Checkp(err) {
+	if Check(err) {
+		log.Error(err)
 		return 0, Error{
-			Title:   "Error getting url param type Int",
-			Message: fmt.Sprintf("The url parameter %v has not been obtained", urlParamName),
+			Title:   "Error getting URL param type Int",
+			Message: fmt.Sprintf("The URL parameter %v has not been obtained", urlParamName),
 		}
 	}
 	return param, nil
 }
 
-// GetURLParamValueInt64 ...
-func GetURLParamValueInt64(urlParamName string, r *http.Request) (int64, Response) {
+// GetRouteVarValueInt64 ...
+func GetRouteVarValueInt64(urlParamName string, r *http.Request) (int64, Response) {
 
 	params := Vars(r)
 	value, err := strconv.ParseInt(params[urlParamName], 10, 64)
-	if Checkp(err) {
+	if Check(err) {
+		log.Error(err)
 		return value, Error{
-			Title:   "Error getting url param type Int64",
-			Message: fmt.Sprintf("The url parameter %v has not been obtained", urlParamName),
+			Title:   "Error getting URL param type Int64",
+			Message: fmt.Sprintf("The URL parameter %v has not been obtained", urlParamName),
 		}
 	}
 	return value, nil
@@ -126,7 +128,8 @@ func GetQueryParamValueString(queryParamName string, r *http.Request) (string, R
 func GetQueryParamValueInt(queryParamName string, r *http.Request) (int, Response) {
 
 	value, err := strconv.Atoi(r.URL.Query().Get(queryParamName))
-	if Checkp(err) {
+	if Check(err) {
+		log.Error(err)
 		return 0, Error{
 			Title:   "Error getting query param type Int!",
 			Message: fmt.Sprintf("The query parameter %v has not been obtained", queryParamName),
@@ -140,7 +143,8 @@ func GetQueryParamValueInt(queryParamName string, r *http.Request) (int, Respons
 func GetQueryParamValueInt64(queryParamName string, r *http.Request) (int64, Response) {
 
 	value, err := strconv.ParseInt(r.URL.Query().Get(queryParamName), 10, 64)
-	if Checkp(err) {
+	if Check(err) {
+		log.Error(err)
 		return 0, Error{
 			Title:   "Error getting query param type Int64!",
 			Message: fmt.Sprintf("The query parameter %v has not been obtained", queryParamName),
@@ -160,7 +164,7 @@ func UnmarshalBody(v interface{}, r *http.Request) Response {
 
 	//  Read body JSON
 	bodyRequest, err := ioutil.ReadAll(r.Body)
-	if Checkp(err) {
+	if Check(err) {
 		log.Error(err)
 		return Error{
 			Title:   "Not read JSON struct!",
@@ -170,7 +174,7 @@ func UnmarshalBody(v interface{}, r *http.Request) Response {
 
 	//  Unmarshal JSON to golang struct and validate
 	err = json.Unmarshal(bodyRequest, &req.JSONStruct)
-	if Checkp(err) {
+	if Check(err) {
 		log.Error(err)
 		return Error{
 			Title:   "Invalid JSON struct!",

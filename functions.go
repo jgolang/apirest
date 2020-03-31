@@ -2,8 +2,6 @@ package apirest
 
 import (
 	"net/http"
-
-	"github.com/jgolang/log"
 )
 
 // Check doc...
@@ -14,18 +12,12 @@ func Check(err error) bool {
 	return false
 }
 
-// Checkp doc...
-func Checkp(err error) bool {
-	if err != nil {
-		log.Error(err)
-		return true
-	}
-	return false
-}
-
 type contextKey int
 
-const varsKey contextKey = iota
+const (
+	varsKey contextKey = iota
+	routeKey
+)
 
 // Vars doc ...
 func Vars(r *http.Request) map[string]string {
