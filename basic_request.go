@@ -73,7 +73,7 @@ func (request *RequestBasic) GetTraceID() Response {
 // UnmarshalBody doc ...
 func (request *RequestBasic) UnmarshalBody() Response {
 
-	resp := UnmarshalBody(request.HTTPReq, request.JSONStruct)
+	resp := UnmarshalBody(request.JSONStruct, request.HTTPReq)
 	if resp != nil {
 		return resp
 	}

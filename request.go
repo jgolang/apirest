@@ -151,7 +151,7 @@ func GetQueryParamValueInt64(queryParamName string, r *http.Request) (int64, Res
 }
 
 // UnmarshalBody doc ...
-func UnmarshalBody(r *http.Request, v interface{}) Response {
+func UnmarshalBody(v interface{}, r *http.Request) Response {
 
 	req := RequestBasic{
 		JSONStruct: v,
