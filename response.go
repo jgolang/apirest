@@ -40,6 +40,7 @@ type JSONResponseInfo struct {
 // Response ...
 type Response interface {
 	setResponse() ResponseData
+	Send(w http.ResponseWriter)
 }
 
 // SendResponse ...
