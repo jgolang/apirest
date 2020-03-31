@@ -15,7 +15,7 @@ func BasicAuth(next http.HandlerFunc) http.HandlerFunc {
 		auth := strings.SplitN(r.Header.Get("Authorization"), " ", 2)
 
 		if len(auth) != 2 || auth[0] != "Basic" {
-			Error{Title: "No autorizado", StatusCode: 401}.Send(w)
+			Error{Title: "Unauthorized!", StatusCode: 401}.Send(w)
 			return
 		}
 
@@ -23,7 +23,7 @@ func BasicAuth(next http.HandlerFunc) http.HandlerFunc {
 		pair := strings.SplitN(string(payload), ":", 2)
 
 		if len(pair) != 2 || !validate(pair[0], pair[1]) {
-			Error{Title: "No autorizado", StatusCode: 401}.Send(w)
+			Error{Title: "Unauthorized!", StatusCode: 401}.Send(w)
 			return
 		}
 
@@ -38,12 +38,12 @@ func RequestHeaderJSON(next http.HandlerFunc) http.HandlerFunc {
 		contentType := r.Header.Get("Content-Type")
 
 		if len(contentType) == 0 {
-			Error{Message: "Petición inválida!"}.Send(w)
+			Error{Message: "No content-type!"}.Send(w)
 			return
 		}
 
 		if contentType != "application/json" {
-			Error{Message: "El Content-Type no es JSON!"}.Send(w)
+			Error{Message: "Content-Type not is JSON!"}.Send(w)
 			return
 		}
 
@@ -73,7 +73,7 @@ func RequestBody(next http.HandlerFunc) http.HandlerFunc {
 			parsingRequestContentError := jsonDecoder.Decode(&request)
 
 			if parsingRequestContentError != nil {
-				Error{Message: "Se requiere cuerpo vacío para utilizar este método!"}.Send(w)
+				Error{Message: "Empty body is required to use this method!"}.Send(w)
 				return
 			}
 

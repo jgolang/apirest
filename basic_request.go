@@ -1,8 +1,6 @@
 package apirest
 
 import (
-	"encoding/json"
-	"io/ioutil"
 	"net/http"
 )
 
@@ -12,7 +10,7 @@ type RequestBasic struct {
 	SessionID  string
 	UserID     string
 	TraceID    string
-	Tools      ToolBasic
+	HTTPReq    *http.Request
 }
 
 // SessionIDPayload doc ...
@@ -24,90 +22,100 @@ var UserIDPayload = "UserID"
 // TraceIDPayload doc ..
 var TraceIDPayload = "event.TraceID"
 
-//UnmarshalBody ...
-func (request RequestBasic) UnmarshalBody(r *http.Request, v interface{}) Response {
-
-	req := RequestBasic{
-		JSONStruct: v,
-	}
-
-	req.Tools.R = r
-
-	//  Read body JSON
-	bodyRequest, err := ioutil.ReadAll(r.Body)
-	if Checkp(err) {
-		return Error{
-			Title:   "Estructura JSON invalida",
-			Message: "Se requiere el cuerpo del objeto en el request",
-		}
-	}
-
-	//  Unmarshal JSON to golang struct and validate
-	unmErr := json.Unmarshal(bodyRequest, &req.JSONStruct)
-	if Checkp(unmErr) {
-		return Error{
-			Title:   "Estructura JSON invalida",
-			Message: "No se ha leído la estructura...",
-		}
-	}
-	return nil
-}
-
 //GetSessionID get session from user
-func (request *RequestBasic) GetSessionID(r *http.Request) Response {
-	request.SessionID = r.Header.Get(SessionIDPayload)
-	if request.SessionID == "" {
-		return Error{
-			Title:   "¡Error de session!",
-			Message: "No se ha obtenido la session del usuario ",
-		}
+func (request *RequestBasic) GetSessionID() Response {
+
+	sessionID, response := GetHeaderValueString(SessionIDPayload, request.HTTPReq)
+	if response != nil {
+		resp := response.(Error)
+		resp.Title = "Session info error!"
+		resp.Message = "The session was not obtained"
+		return response
 	}
+
+	request.SessionID = sessionID
+
 	return nil
 }
 
 //GetUserID get id user session
-func (request *RequestBasic) GetUserID(r *http.Request) Response {
-	request.UserID = r.Header.Get(UserIDPayload)
-	if request.UserID == "" {
-		return Error{
-			Title:   "¡Error de session!",
-			Message: "No se ha obtenido el id del usuario",
-		}
+func (request *RequestBasic) GetUserID() Response {
+
+	userID, response := GetHeaderValueString(UserIDPayload, request.HTTPReq)
+	if response != nil {
+		resp := response.(Error)
+		resp.Title = "Session info error!"
+		resp.Message = "The user id was not obtained"
+		return response
 	}
+
+	request.UserID = userID
+
 	return nil
 }
 
 //GetTraceID doc
-func (request *RequestBasic) GetTraceID(r *http.Request) Response {
-	request.TraceID = r.Header.Get(TraceIDPayload)
-	if request.TraceID == "" {
-		return Error{
-			Title:   "¡Error de session!",
-			Message: "No se ha obtenido el id del evento",
-		}
+func (request *RequestBasic) GetTraceID() Response {
+
+	traceID, response := GetHeaderValueString(TraceIDPayload, request.HTTPReq)
+	if response != nil {
+		resp := response.(Error)
+		resp.Title = "Session info error!"
+		resp.Message = "The trace id was not obtained"
+		return response
 	}
+
+	request.TraceID = traceID
+
+	return nil
+}
+
+// UnmarshalBody doc ...
+func (request *RequestBasic) UnmarshalBody() Response {
+
+	resp := UnmarshalBody(request.HTTPReq, request.JSONStruct)
+	if resp != nil {
+		return resp
+	}
+
 	return nil
 }
 
 //GetSessionInfo ..
-func (request RequestBasic) GetSessionInfo(r *http.Request) (Request, Response) {
+func (request *RequestBasic) GetSessionInfo() Response {
 
-	req := RequestBasic{}
+	resp := request.GetSessionID()
+	if resp != nil {
+		return resp
+	}
 
-	req.Tools.R = r
+	resp = request.GetUserID()
+	if resp != nil {
+		return resp
+	}
 
-	resp := request.GetSessionID(r)
-	if resp.setResponse().StatusCode != 0 {
-		return nil, resp
+	resp = request.GetTraceID()
+	if resp != nil {
+		return resp
 	}
-	resp = request.GetUserID(r)
-	if resp.setResponse().StatusCode != 0 {
-		return nil, resp
+
+	return nil
+
+}
+
+// GetRequestInfo ..
+func (request *RequestBasic) GetRequestInfo() Response {
+
+	resp := request.GetSessionInfo()
+	if resp != nil {
+		return resp
 	}
-	resp = request.GetTraceID(r)
-	if resp.setResponse().StatusCode != 0 {
-		return nil, resp
+
+	resp = request.UnmarshalBody()
+	if resp != nil {
+		return resp
 	}
-	return req, nil
+
+	return nil
 
 }
