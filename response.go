@@ -2,6 +2,7 @@ package apirest
 
 import (
 	"encoding/json"
+	"log"
 	"net/http"
 )
 
@@ -79,7 +80,10 @@ func (response ResponseData) SendResponse(w http.ResponseWriter) {
 		Content: response.Content,
 	}
 
-	json.NewEncoder(w).Encode(jsonResponse)
+	err := json.NewEncoder(w).Encode(jsonResponse)
+	if err != nil {
+		log.Fatal(err)
+	}
 
 	return
 
