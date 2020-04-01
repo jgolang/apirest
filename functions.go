@@ -14,7 +14,7 @@ func Check(err error) bool {
 
 // Vars doc ...
 func Vars(r *http.Request) map[string]string {
-	if rv := r.Context().Value(0); rv != nil {
+	if rv := r.Context().Value(1); rv != nil {
 		return rv.(map[string]string)
 	}
 	return nil
