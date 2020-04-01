@@ -96,9 +96,7 @@ func GetRouteVarValueInt(urlVarName string, r *http.Request) (int, Response) {
 
 // GetRouteVarValueInt64 ...
 func GetRouteVarValueInt64(urlVarName string, r *http.Request) (int64, Response) {
-
 	vars := mux.Vars(r)
-	log.Info(vars)
 	value, err := strconv.ParseInt(vars[urlVarName], 10, 64)
 	if Check(err) {
 		log.Error(err)
@@ -108,12 +106,10 @@ func GetRouteVarValueInt64(urlVarName string, r *http.Request) (int64, Response)
 		}
 	}
 	return value, nil
-
 }
 
 // GetQueryParamValueString ...
 func GetQueryParamValueString(queryParamName string, r *http.Request) (string, Response) {
-
 	value := r.URL.Query().Get(queryParamName)
 	if value == "" {
 		return value, Error{
@@ -128,7 +124,6 @@ func GetQueryParamValueString(queryParamName string, r *http.Request) (string, R
 
 // GetQueryParamValueInt ...
 func GetQueryParamValueInt(queryParamName string, r *http.Request) (int, Response) {
-
 	value, err := strconv.Atoi(r.URL.Query().Get(queryParamName))
 	if Check(err) {
 		log.Error(err)
@@ -138,12 +133,10 @@ func GetQueryParamValueInt(queryParamName string, r *http.Request) (int, Respons
 		}
 	}
 	return value, nil
-
 }
 
 // GetQueryParamValueInt64 ...
 func GetQueryParamValueInt64(queryParamName string, r *http.Request) (int64, Response) {
-
 	value, err := strconv.ParseInt(r.URL.Query().Get(queryParamName), 10, 64)
 	if Check(err) {
 		log.Error(err)
@@ -153,7 +146,6 @@ func GetQueryParamValueInt64(queryParamName string, r *http.Request) (int64, Res
 		}
 	}
 	return value, nil
-
 }
 
 // UnmarshalBody doc ...

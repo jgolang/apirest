@@ -3,8 +3,6 @@ package apirest
 import (
 	"encoding/json"
 	"net/http"
-
-	"github.com/jgolang/log"
 )
 
 // ResponseType contains all the response types identiers
@@ -75,19 +73,6 @@ func (response ResponseData) SendResponse(w http.ResponseWriter) {
 		Action:    response.Action,
 		SessionID: response.SessionID,
 	}
-
-	// var jsonContent []byte
-
-	// var err error
-	// if response.Content != nil {
-	// 	jsonContent, err = json.Marshal(response.Content)
-	// 	if err != nil {
-	// 		log.Fatal(err)
-	// 		return
-	// 	}
-	// }
-
-	log.Info(response.Content)
 
 	jsonResponse := JSONResponse{
 		Info:    info,
