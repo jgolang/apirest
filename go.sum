@@ -1,3 +1,5 @@
+github.com/gorilla/mux v1.7.4 h1:VuZ8uybHlWmqV03+zRzdwKL4tUnIp1MAQtp1mIFE1bc=
+github.com/gorilla/mux v1.7.4/go.mod h1:DVbg23sWSpFRCP0SfiEN6jmj59UnW/n46BH5rLB71So=
 github.com/jgolang/log v0.0.0-20191016075252-b9fdd9bc0a7e h1:gHwaLCOMfB29Z8dM5KZPQLIlXIV0DlghbTc+KBPl3cU=
 github.com/jgolang/log v0.0.0-20191016075252-b9fdd9bc0a7e/go.mod h1:Pos1sztYh8gkYEbW2t6Lv8JjnWcxjAN5VT35wu2w/uI=
 go.uber.org/atomic v1.4.0 h1:cxzIVoETapQEqDhQu3QfnvXAV4AlzcvUCxkVUFw3+EU=

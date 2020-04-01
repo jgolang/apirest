@@ -1,23 +1,11 @@
 package apirest
 
-import (
-	"net/http"
-)
-
 // Check doc...
 func Check(err error) bool {
 	if err != nil {
 		return true
 	}
 	return false
-}
-
-// Vars doc ...
-func Vars(r *http.Request) map[string]string {
-	if rv := r.Context().Value(1); rv != nil {
-		return rv.(map[string]string)
-	}
-	return nil
 }
 
 var (

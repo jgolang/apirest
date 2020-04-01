@@ -7,6 +7,7 @@ import (
 	"net/http"
 	"strconv"
 
+	"github.com/gorilla/mux"
 	"github.com/jgolang/log"
 )
 
@@ -67,43 +68,43 @@ func GetHeaderValueInt64(key string, r *http.Request) (int64, Response) {
 }
 
 // GetRouteVarValueString ...
-func GetRouteVarValueString(urlParamName string, r *http.Request) (string, Response) {
-	params := Vars(r)
-	value := params[urlParamName]
+func GetRouteVarValueString(urlVarName string, r *http.Request) (string, Response) {
+	vars := mux.Vars(r)
+	value := vars[urlVarName]
 	if value == "" {
 		return value, Error{
 			Title:   "Error getting route var!",
-			Message: fmt.Sprintf("The route var %v has not been obtained", urlParamName),
+			Message: fmt.Sprintf("The route var %v has not been obtained", urlVarName),
 		}
 	}
 	return value, nil
 }
 
 // GetRouteVarValueInt ...
-func GetRouteVarValueInt(urlParamName string, r *http.Request) (int, Response) {
-	params := Vars(r)
-	param, err := strconv.Atoi(params[urlParamName]) //  Get user id
+func GetRouteVarValueInt(urlVarName string, r *http.Request) (int, Response) {
+	vars := mux.Vars(r)
+	value, err := strconv.Atoi(vars[urlVarName]) //  Get user id
 	if Check(err) {
 		log.Error(err)
 		return 0, Error{
 			Title:   "Error getting route var type Int",
-			Message: fmt.Sprintf("The route var %v has not been obtained", urlParamName),
+			Message: fmt.Sprintf("The route var %v has not been obtained", urlVarName),
 		}
 	}
-	return param, nil
+	return value, nil
 }
 
 // GetRouteVarValueInt64 ...
-func GetRouteVarValueInt64(urlParamName string, r *http.Request) (int64, Response) {
+func GetRouteVarValueInt64(urlVarName string, r *http.Request) (int64, Response) {
 
-	params := Vars(r)
-	log.Info(params)
-	value, err := strconv.ParseInt(params[urlParamName], 10, 64)
+	vars := mux.Vars(r)
+	log.Info(vars)
+	value, err := strconv.ParseInt(vars[urlVarName], 10, 64)
 	if Check(err) {
 		log.Error(err)
 		return value, Error{
 			Title:   "Error getting route var type Int64",
-			Message: fmt.Sprintf("The route var %v has not been obtained", urlParamName),
+			Message: fmt.Sprintf("The route var %v has not been obtained", urlVarName),
 		}
 	}
 	return value, nil
