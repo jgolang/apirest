@@ -72,8 +72,8 @@ func GetRouteVarValueString(urlParamName string, r *http.Request) (string, Respo
 	value := params[urlParamName]
 	if value == "" {
 		return value, Error{
-			Title:   "Error getting URL param!",
-			Message: fmt.Sprintf("The URL parameter %v has not been obtained", urlParamName),
+			Title:   "Error getting route var!",
+			Message: fmt.Sprintf("The route var %v has not been obtained", urlParamName),
 		}
 	}
 	return value, nil
@@ -86,8 +86,8 @@ func GetRouteVarValueInt(urlParamName string, r *http.Request) (int, Response) {
 	if Check(err) {
 		log.Error(err)
 		return 0, Error{
-			Title:   "Error getting URL param type Int",
-			Message: fmt.Sprintf("The URL parameter %v has not been obtained", urlParamName),
+			Title:   "Error getting route var type Int",
+			Message: fmt.Sprintf("The route var %v has not been obtained", urlParamName),
 		}
 	}
 	return param, nil
@@ -101,8 +101,8 @@ func GetRouteVarValueInt64(urlParamName string, r *http.Request) (int64, Respons
 	if Check(err) {
 		log.Error(err)
 		return value, Error{
-			Title:   "Error getting URL param type Int64",
-			Message: fmt.Sprintf("The URL parameter %v has not been obtained", urlParamName),
+			Title:   "Error getting route var type Int64",
+			Message: fmt.Sprintf("The route var %v has not been obtained", urlParamName),
 		}
 	}
 	return value, nil
