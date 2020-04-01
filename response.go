@@ -2,7 +2,6 @@ package apirest
 
 import (
 	"encoding/json"
-	"log"
 	"net/http"
 )
 
@@ -75,20 +74,20 @@ func (response ResponseData) SendResponse(w http.ResponseWriter) {
 		SessionID: response.SessionID,
 	}
 
-	var jsonContent []byte
+	// var jsonContent []byte
 
-	var err error
-	if response.Content != nil {
-		jsonContent, err = json.Marshal(response.Content)
-		if err != nil {
-			log.Fatal(err)
-			return
-		}
-	}
+	// var err error
+	// if response.Content != nil {
+	// 	jsonContent, err = json.Marshal(response.Content)
+	// 	if err != nil {
+	// 		log.Fatal(err)
+	// 		return
+	// 	}
+	// }
 
 	jsonResponse := JSONResponse{
 		Info:    info,
-		Content: jsonContent,
+		Content: response.Content,
 	}
 
 	json.NewEncoder(w).Encode(jsonResponse)
