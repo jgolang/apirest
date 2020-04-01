@@ -14,14 +14,9 @@ func Check(err error) bool {
 
 type contextKey int
 
-const (
-	varsKey contextKey = iota
-	routeKey
-)
-
 // Vars doc ...
 func Vars(r *http.Request) map[string]string {
-	if rv := r.Context().Value(varsKey); rv != nil {
+	if rv := r.Context().Value(0); rv != nil {
 		return rv.(map[string]string)
 	}
 	return nil
