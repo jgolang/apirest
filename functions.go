@@ -12,8 +12,6 @@ func Check(err error) bool {
 	return false
 }
 
-type contextKey int
-
 // Vars doc ...
 func Vars(r *http.Request) map[string]string {
 	if rv := r.Context().Value(0); rv != nil {

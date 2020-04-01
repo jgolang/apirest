@@ -97,6 +97,7 @@ func GetRouteVarValueInt(urlParamName string, r *http.Request) (int, Response) {
 func GetRouteVarValueInt64(urlParamName string, r *http.Request) (int64, Response) {
 
 	params := Vars(r)
+	log.Info(params)
 	value, err := strconv.ParseInt(params[urlParamName], 10, 64)
 	if Check(err) {
 		log.Error(err)
