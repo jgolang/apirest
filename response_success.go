@@ -4,9 +4,9 @@ import "net/http"
 
 var (
 	// DefaultSuccessTitle doc ...
-	DefaultSuccessTitle = "Congratulations!"
+	DefaultSuccessTitle = "Successful!"
 	// DefaultSuccessMessage doc ..
-	DefaultSuccessMessage = "The request has been succeeded!"
+	DefaultSuccessMessage = "The request has been successful!"
 )
 
 // Success success response type the value is "success"
