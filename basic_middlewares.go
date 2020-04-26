@@ -3,12 +3,9 @@ package apirest
 import (
 	"bytes"
 	"encoding/base64"
-	"encoding/json"
 	"io/ioutil"
 	"net/http"
 	"strings"
-
-	"github.com/jgolang/log"
 )
 
 // BasicAuth ...
@@ -76,19 +73,17 @@ func RequestBody(next http.HandlerFunc) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 
 		if r.Method == http.MethodPost || r.Method == http.MethodPut || r.Method == http.MethodPatch {
-			// Decode the request body to JSON
-			jsonDecoder := json.NewDecoder(r.Body)
-			var request JSONRequest
-			err := jsonDecoder.Decode(&request)
 
-			if err != nil {
-				log.Error(err)
-				Error{Message: "Empty body is required to use this method!"}.Send(w)
+			var reqStruct JSONRequest
+
+			response := UnmarshalBody(reqStruct, r)
+			if response != nil {
+				response.Send(w)
 				return
 			}
 
-			r.Header.Set("Request-Content", string(request.Content))
-			r.Body = ioutil.NopCloser(bytes.NewBuffer(request.Content))
+			r.Header.Set("Request-Content", string(reqStruct.Content))
+			r.Body = ioutil.NopCloser(bytes.NewBuffer(reqStruct.Content))
 
 		}
 
