@@ -85,7 +85,7 @@ func GetRouteVarValueInt(urlVarName string, r *http.Request) (int, Response) {
 	vars := mux.Vars(r)
 	value, err := strconv.Atoi(vars[urlVarName]) //  Get user id
 	if Check(err) {
-		log.Error(err)
+		log.StackTrace(err)
 		return 0, Error{
 			Title:   "Error getting route var type Int",
 			Message: fmt.Sprintf("The route var %v has not been obtained", urlVarName),
@@ -99,7 +99,7 @@ func GetRouteVarValueInt64(urlVarName string, r *http.Request) (int64, Response)
 	vars := mux.Vars(r)
 	value, err := strconv.ParseInt(vars[urlVarName], 10, 64)
 	if Check(err) {
-		log.Error(err)
+		log.StackTrace(err)
 		return value, Error{
 			Title:   "Error getting route var type Int64",
 			Message: fmt.Sprintf("The route var %v has not been obtained", urlVarName),
@@ -126,7 +126,7 @@ func GetQueryParamValueString(queryParamName string, r *http.Request) (string, R
 func GetQueryParamValueInt(queryParamName string, r *http.Request) (int, Response) {
 	value, err := strconv.Atoi(r.URL.Query().Get(queryParamName))
 	if Check(err) {
-		log.Error(err)
+		log.StackTrace(err)
 		return 0, Error{
 			Title:   "Error getting query param type Int!",
 			Message: fmt.Sprintf("The query parameter %v has not been obtained", queryParamName),
@@ -139,7 +139,7 @@ func GetQueryParamValueInt(queryParamName string, r *http.Request) (int, Respons
 func GetQueryParamValueInt64(queryParamName string, r *http.Request) (int64, Response) {
 	value, err := strconv.ParseInt(r.URL.Query().Get(queryParamName), 10, 64)
 	if Check(err) {
-		log.Error(err)
+		log.StackTrace(err)
 		return 0, Error{
 			Title:   "Error getting query param type Int64!",
 			Message: fmt.Sprintf("The query parameter %v has not been obtained", queryParamName),
@@ -154,7 +154,7 @@ func UnmarshalBody(v interface{}, r *http.Request) Response {
 	//  Read body JSON
 	bodyRequest, err := ioutil.ReadAll(r.Body)
 	if Check(err) {
-		log.Error(err)
+		log.StackTrace(err)
 		return Error{
 			Title:   "Not read JSON struct!",
 			Message: "Error when reading JSON structure",
@@ -164,7 +164,7 @@ func UnmarshalBody(v interface{}, r *http.Request) Response {
 	//  Unmarshal JSON to golang struct and validate
 	err = json.Unmarshal(bodyRequest, v)
 	if Check(err) {
-		log.Error(err)
+		log.StackTrace(err)
 		return Error{
 			Title:   "Invalid JSON struct!",
 			Message: "Error when umarshal JSON structure",

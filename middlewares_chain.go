@@ -5,7 +5,7 @@ import (
 	"net/http"
 	"net/http/httptest"
 
-	"go.mnc.gt/log"
+	"github.com/jgolang/log"
 )
 
 // Middleware provides a convenient mechanism for filtering HTTP requests
