@@ -6,8 +6,6 @@ import (
 	"io/ioutil"
 	"net/http"
 	"strings"
-
-	"github.com/jgolang/log"
 )
 
 // BasicAuth ...
@@ -77,11 +75,6 @@ func RequestBody(next http.HandlerFunc) http.HandlerFunc {
 		if r.Method == http.MethodPost || r.Method == http.MethodPut || r.Method == http.MethodPatch {
 
 			var reqStruct JSONRequest
-
-			buf := new(bytes.Buffer)
-			buf.ReadFrom(r.Body)
-			bodyStr := buf.String()
-			log.Info(bodyStr)
 
 			response := UnmarshalBody(&reqStruct, r)
 			if response != nil {
