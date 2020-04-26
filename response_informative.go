@@ -6,7 +6,7 @@ var (
 	// DefaultInfoTitle doc ...
 	DefaultInfoTitle = "Information!"
 	// DefaultInfoMessage doc ..
-	DefaultInfoMessage = "The request has succeeded!"
+	DefaultInfoMessage = "The request has been succeeded!"
 )
 
 // Informative info response type the value is "info"

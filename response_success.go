@@ -6,7 +6,7 @@ var (
 	// DefaultSuccessTitle doc ...
 	DefaultSuccessTitle = "Congratulations!"
 	// DefaultSuccessMessage doc ..
-	DefaultSuccessMessage = "The request has succeeded!"
+	DefaultSuccessMessage = "The request has been succeeded!"
 )
 
 // Success success response type the value is "success"
