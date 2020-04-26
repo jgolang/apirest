@@ -2,6 +2,7 @@ package apirest
 
 import (
 	"bytes"
+	"io/ioutil"
 	"net/http"
 	"net/http/httptest"
 
@@ -51,13 +52,17 @@ func printAPIRequest(r *http.Request) {
 		return
 	}
 
-	buf := new(bytes.Buffer)
-	buf.ReadFrom(r.Body)
-	bodyStr := buf.String()
+	byteBody, err := ioutil.ReadAll(r.Body)
+	if err != nil {
+		log.Fatal(err)
+	}
+
 	log.Infof("Request: %v %v", r.Method, r.RequestURI)
 	log.Infof("Headers: %v", r.Header)
 	log.Infof("Form: %v", r.Form.Encode())
-	log.Infof("Body: \n%v", bodyStr)
+	log.Infof("Body: \n%v", string(byteBody))
+
+	r.Body = ioutil.NopCloser(bytes.NewBuffer(byteBody))
 
 }
 
