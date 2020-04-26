@@ -30,6 +30,13 @@ func MiddlewaresChain(mw ...Middleware) Middleware {
 
 			last(res, r)
 
+			for i, header := range res.Header() {
+				w.Header()[i] = header
+			}
+
+			w.WriteHeader(res.Code)
+			w.Write(res.Body.Bytes())
+
 			printAPIResponse(res)
 
 		}
@@ -47,10 +54,10 @@ func printAPIRequest(r *http.Request) {
 	buf := new(bytes.Buffer)
 	buf.ReadFrom(r.Body)
 	bodyStr := buf.String()
-	log.Infof("Request: %v %v\n", r.Method, r.RequestURI)
-	log.Infof("Headers: %v\n", r.Header)
-	log.Infof("Form: %v\n", r.Form.Encode())
-	log.Infof("Body: %v\n", bodyStr)
+	log.Infof("Request: %v %v", r.Method, r.RequestURI)
+	log.Infof("Headers: %v", r.Header)
+	log.Infof("Form: %v", r.Form.Encode())
+	log.Infof("Body: \n%v", bodyStr)
 
 }
 
@@ -63,9 +70,9 @@ func printAPIResponse(res *httptest.ResponseRecorder) {
 	buf := new(bytes.Buffer)
 	buf.ReadFrom(res.Body)
 	bodyStr := buf.String()
-	log.Infof("Response: %v\n", res.Result())
-	log.Infof("Status Code: %v %v\n", res.Code, http.StatusText(res.Code))
-	log.Infof("Headers: %v\n", res.Header())
-	log.Infof("Body: %v\n", bodyStr)
+	log.Infof("Response: %v", res.Result())
+	log.Infof("Status Code: %v %v", res.Code, http.StatusText(res.Code))
+	log.Infof("Headers: %v", res.Header())
+	log.Infof("Body: \n%v", bodyStr)
 
 }
