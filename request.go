@@ -1,6 +1,7 @@
 package apirest
 
 import (
+	"bytes"
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
@@ -161,7 +162,10 @@ func UnmarshalBody(v interface{}, r *http.Request) Response {
 		}
 	}
 
-	log.Info(string(bodyRequest))
+	buf := new(bytes.Buffer)
+	buf.ReadFrom(r.Body)
+	bodyStr := buf.String()
+	log.Info(bodyStr)
 
 	//  Unmarshal JSON to golang struct and validate
 	err = json.Unmarshal(bodyRequest, v)
@@ -172,6 +176,7 @@ func UnmarshalBody(v interface{}, r *http.Request) Response {
 			Message: "Error when umarshal JSON structure",
 		}
 	}
+
 	return nil
 
 }
