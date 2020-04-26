@@ -7,6 +7,8 @@ import (
 	"io/ioutil"
 	"net/http"
 	"strings"
+
+	"github.com/jgolang/log"
 )
 
 // BasicAuth ...
@@ -77,9 +79,10 @@ func RequestBody(next http.HandlerFunc) http.HandlerFunc {
 			// Decode the request body to JSON
 			jsonDecoder := json.NewDecoder(r.Body)
 			var request JSONRequest
-			parsingRequestContentError := jsonDecoder.Decode(&request)
+			err := jsonDecoder.Decode(&request)
 
-			if parsingRequestContentError != nil {
+			if err != nil {
+				log.Error(err)
 				Error{Message: "Empty body is required to use this method!"}.Send(w)
 				return
 			}
