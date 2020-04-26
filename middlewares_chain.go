@@ -57,10 +57,10 @@ func printAPIRequest(r *http.Request) {
 		log.Fatal(err)
 	}
 
-	log.Infof("Request: %v %v", r.Method, r.RequestURI)
-	log.Infof("Headers: %v", r.Header)
-	log.Infof("Form: %v", r.Form.Encode())
-	log.Infof("Body: \n%v", string(byteBody))
+	log.Infof("REQUEST: %v %v", r.Method, r.RequestURI)
+	log.Infof("HEADER: %v", r.Header)
+	log.Infof("FORM: %v", r.Form.Encode())
+	log.Infof("BODY: \n%v", string(byteBody))
 
 	r.Body = ioutil.NopCloser(bytes.NewBuffer(byteBody))
 
@@ -75,9 +75,10 @@ func printAPIResponse(res *httptest.ResponseRecorder) {
 	buf := new(bytes.Buffer)
 	buf.ReadFrom(res.Body)
 	bodyStr := buf.String()
-	log.Infof("Response: %v", res.Result())
-	log.Infof("Status Code: %v %v", res.Code, http.StatusText(res.Code))
-	log.Infof("Headers: %v", res.Header())
-	log.Infof("Body: \n%v", bodyStr)
+
+	log.Infof("RESPONSE: %v", res.Result())
+	log.Infof("STATUS CODE: %v %v", res.Code, http.StatusText(res.Code))
+	log.Infof("HEADER: %v", res.Header())
+	log.Infof("BODY: \n%v", bodyStr)
 
 }
