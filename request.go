@@ -151,11 +151,6 @@ func GetQueryParamValueInt64(queryParamName string, r *http.Request) (int64, Res
 // UnmarshalBody doc ...
 func UnmarshalBody(v interface{}, r *http.Request) Response {
 
-	req := RequestBasic{
-		JSONStruct: v,
-		HTTPReq:    r,
-	}
-
 	//  Read body JSON
 	bodyRequest, err := ioutil.ReadAll(r.Body)
 	if Check(err) {
@@ -167,7 +162,7 @@ func UnmarshalBody(v interface{}, r *http.Request) Response {
 	}
 
 	//  Unmarshal JSON to golang struct and validate
-	err = json.Unmarshal(bodyRequest, &req.JSONStruct)
+	err = json.Unmarshal(bodyRequest, v)
 	if Check(err) {
 		log.Error(err)
 		return Error{
