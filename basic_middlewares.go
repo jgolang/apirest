@@ -1,8 +1,10 @@
 package apirest
 
 import (
+	"bytes"
 	"encoding/base64"
 	"encoding/json"
+	"io/ioutil"
 	"net/http"
 	"strings"
 )
@@ -28,11 +30,13 @@ func BasicAuth(next http.HandlerFunc) http.HandlerFunc {
 		}
 
 		next(w, r)
+
 	}
 }
 
 // RequestHeaderJSON validate header Content-Type, is required and equal to application/json
 func RequestHeaderJSON(next http.HandlerFunc) http.HandlerFunc {
+
 	return func(w http.ResponseWriter, r *http.Request) {
 
 		contentType := r.Header.Get("Content-Type")
@@ -48,28 +52,31 @@ func RequestHeaderJSON(next http.HandlerFunc) http.HandlerFunc {
 		}
 
 		next.ServeHTTP(w, r)
+
 	}
+
 }
 
 // RequestHeaderSession doc ...
 func RequestHeaderSession(next http.HandlerFunc) http.HandlerFunc {
+
 	return func(w http.ResponseWriter, r *http.Request) {
 		sessionID := r.Header.Get("SessionId")
 		w.Header().Set("SessionId", sessionID)
 		next.ServeHTTP(w, r)
 	}
+
 }
 
 // RequestBody doc ...
 func RequestBody(next http.HandlerFunc) http.HandlerFunc {
+
 	return func(w http.ResponseWriter, r *http.Request) {
 
 		if r.Method == http.MethodPost || r.Method == http.MethodPut || r.Method == http.MethodPatch {
 			// Decode the request body to JSON
 			jsonDecoder := json.NewDecoder(r.Body)
-
 			var request JSONRequest
-
 			parsingRequestContentError := jsonDecoder.Decode(&request)
 
 			if parsingRequestContentError != nil {
@@ -78,9 +85,12 @@ func RequestBody(next http.HandlerFunc) http.HandlerFunc {
 			}
 
 			r.Header.Set("Request-Content", string(request.Content))
+			r.Body = ioutil.NopCloser(bytes.NewBuffer(request.Content))
 
 		}
 
 		next.ServeHTTP(w, r)
+
 	}
+
 }
