@@ -161,8 +161,10 @@ func UnmarshalBody(v interface{}, r *http.Request) Response {
 		}
 	}
 
+	log.Info(string(bodyRequest))
+
 	//  Unmarshal JSON to golang struct and validate
-	err = json.Unmarshal(bodyRequest, &v)
+	err = json.Unmarshal(bodyRequest, v)
 	if Check(err) {
 		log.StackTrace(err)
 		return Error{
