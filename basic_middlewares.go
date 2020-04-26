@@ -76,7 +76,7 @@ func RequestBody(next http.HandlerFunc) http.HandlerFunc {
 
 			var reqStruct JSONRequest
 
-			response := UnmarshalBody(&reqStruct, r)
+			response := UnmarshalBody(reqStruct, r)
 			if response != nil {
 				response.Send(w)
 				return
