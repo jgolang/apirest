@@ -15,8 +15,8 @@ type Success struct {
 	Message    string
 	StatusCode int
 	Action     string
+	SessionID  string
 	Content    interface{}
-	ResponseData
 }
 
 // SetResponse success ...
@@ -40,6 +40,7 @@ func (success Success) setResponse() ResponseData {
 		StatusCode: success.StatusCode,
 		Type:       SuccessType,
 		Action:     success.Action,
+		SessionID:  success.SessionID,
 		Content:    success.Content,
 	}
 

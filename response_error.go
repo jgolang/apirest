@@ -15,6 +15,7 @@ type Error struct {
 	Message    string
 	StatusCode int
 	Action     string
+	SessionID  string
 	Content    interface{}
 }
 
@@ -40,6 +41,7 @@ func (err Error) setResponse() ResponseData {
 		StatusCode: err.StatusCode,
 		Type:       ErrorType,
 		Action:     err.Action,
+		SessionID:  err.SessionID,
 		Content:    err.Content,
 	}
 

@@ -15,6 +15,7 @@ type Informative struct {
 	Message    string
 	StatusCode int
 	Action     string
+	SessionID  string
 	Content    interface{}
 }
 
@@ -39,6 +40,7 @@ func (info Informative) setResponse() ResponseData {
 		StatusCode: info.StatusCode,
 		Type:       InformativeType,
 		Action:     info.Action,
+		SessionID:  info.SessionID,
 		Content:    info.Content,
 	}
 

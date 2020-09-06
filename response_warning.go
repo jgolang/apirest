@@ -15,6 +15,7 @@ type Warning struct {
 	Message    string
 	StatusCode int
 	Action     string
+	SessionID  string
 	Content    interface{}
 }
 
@@ -39,6 +40,7 @@ func (warning Warning) setResponse() ResponseData {
 		StatusCode: warning.StatusCode,
 		Type:       WarningType,
 		Action:     warning.Action,
+		SessionID:  warning.SessionID,
 		Content:    warning.Content,
 	}
 }
