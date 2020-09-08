@@ -1,4 +1,4 @@
 github.com/gorilla/mux v1.8.0 h1:i40aqfkR1h2SlN9hojwV5ZA91wcXFOvkdNIeFDP5koI=
 github.com/gorilla/mux v1.8.0/go.mod h1:DVbg23sWSpFRCP0SfiEN6jmj59UnW/n46BH5rLB71So=
-github.com/jgolang/log v1.1.4 h1:hXsCZh3GxyqNk9kmEL/rP/k5JhQdES0Zc/Z6c+86Mws=
-github.com/jgolang/log v1.1.4/go.mod h1:768opTKNrYsjcsdz/aiFW4rRMtv7NdSK+l0mgVq1tzs=
+github.com/jgolang/log v1.1.5 h1:xjSiSpRhGxYihvxdHu9e7O55yUEdrC25RXV1p/Fp2yQ=
+github.com/jgolang/log v1.1.5/go.mod h1:768opTKNrYsjcsdz/aiFW4rRMtv7NdSK+l0mgVq1tzs=
