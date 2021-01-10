@@ -14,6 +14,7 @@ func New(f APIResponseFormatter, r APIResponder) *APIRest {
 type APIRest struct {
 	formatter APIResponseFormatter
 	responder APIResponder
+	request   interface{}
 }
 
 // Respond ...
