@@ -2,8 +2,8 @@ package core
 
 import "net/http"
 
-// APIFormatter doc ...
-type APIFormatter interface {
+// APIResponseFormatter doc ...
+type APIResponseFormatter interface {
 	Format(ResponseData) ResponseFormatted
 }
 
