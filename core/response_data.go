@@ -12,7 +12,7 @@ type ResponseData struct {
 	Title         string
 	Message       string
 	StatusCode    int
-	ErrorCode     int
+	ErrorCode     string
 	Action        string
 	SessionID     string
 	ResponseType  ResponseType
