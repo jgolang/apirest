@@ -9,21 +9,21 @@ type ResponseFormatted struct {
 
 // ResponseData doc ..
 type ResponseData struct {
-	Title         string
-	Message       string
-	StatusCode    int
-	ErrorCode     string
-	Action        string
-	SessionID     string
-	ResponseType  ResponseType
-	Headers       map[string]string
-	AditionalInfo map[string]string
-	Data          interface{}
+	Title          string
+	Message        string
+	StatusCode     int
+	ErrorCode      string
+	Action         string
+	SessionID      string
+	ResponseType   ResponseType
+	Headers        map[string]string
+	AdditionalInfo map[string]string
+	Data           interface{}
 }
 
-// AddAditionalInfo func ...
-func (data *ResponseData) AddAditionalInfo(key, value string) {
-	data.AditionalInfo[key] = value
+// AddAdditionalInfo func ...
+func (data *ResponseData) AddAdditionalInfo(key, value string) {
+	data.AdditionalInfo[key] = value
 }
 
 // AddHeader doc
