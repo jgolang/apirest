@@ -23,7 +23,7 @@ func (api APIRest) GetRouteVarValueInt(urlVarName string, r *http.Request) (int,
 	vars := api.Vars(r)
 	value, err := strconv.Atoi(vars[urlVarName])
 	if err != nil {
-		return value, fmt.Errorf("The route var %v has not been obtained", urlVarName)
+		return value, err
 	}
 	return value, nil
 }
@@ -33,7 +33,7 @@ func (api APIRest) GetRouteVarValueInt64(urlVarName string, r *http.Request) (in
 	vars := api.Vars(r)
 	value, err := strconv.ParseInt(vars[urlVarName], 10, 64)
 	if err != nil {
-		return value, fmt.Errorf("The route var %v has not been obtained", urlVarName)
+		return value, err
 	}
 	return value, nil
 }
@@ -43,7 +43,7 @@ func (api APIRest) GetRouteVarValueFloat64(urlVarName string, r *http.Request) (
 	vars := api.Vars(r)
 	value, err := strconv.ParseFloat(vars[urlVarName], 64)
 	if err != nil {
-		return 0, fmt.Errorf("The route var %v has not been obtained", urlVarName)
+		return value, err
 	}
 	return value, nil
 }
@@ -53,7 +53,7 @@ func (api APIRest) GetRouteVarValueBool(urlVarName string, r *http.Request) (boo
 	vars := api.Vars(r)
 	value, err := strconv.ParseBool(vars[urlVarName])
 	if err != nil {
-		return false, fmt.Errorf("The route var %v has not been obtained", urlVarName)
+		return false, err
 	}
 	return value, nil
 }
@@ -85,7 +85,7 @@ func (api APIRest) GetHeaderValueString(key string, r *http.Request) (string, er
 func (api APIRest) GetHeaderValueInt(key string, r *http.Request) (int, error) {
 	value, err := strconv.Atoi(r.Header.Get(key))
 	if err != nil {
-		return value, fmt.Errorf("The %v key header has not been obtained", key)
+		return value, err
 	}
 	return value, nil
 }
@@ -94,7 +94,7 @@ func (api APIRest) GetHeaderValueInt(key string, r *http.Request) (int, error) {
 func (api APIRest) GetHeaderValueInt64(key string, r *http.Request) (int64, error) {
 	value, err := strconv.ParseInt(r.Header.Get(key), 10, 64)
 	if err != nil {
-		return value, fmt.Errorf("The %v key header has not been obtained", key)
+		return value, err
 	}
 	return value, nil
 }
@@ -103,7 +103,7 @@ func (api APIRest) GetHeaderValueInt64(key string, r *http.Request) (int64, erro
 func (api APIRest) GetHeaderValueFloat64(key string, r *http.Request) (float64, error) {
 	value, err := strconv.ParseFloat(r.Header.Get(key), 64)
 	if err != nil {
-		return value, fmt.Errorf("The %v key header has not been obtained", key)
+		return value, err
 	}
 	return value, nil
 }
@@ -112,7 +112,7 @@ func (api APIRest) GetHeaderValueFloat64(key string, r *http.Request) (float64, 
 func (api APIRest) GetHeaderValueBool(key string, r *http.Request) (bool, error) {
 	value, err := strconv.ParseBool(r.Header.Get(key))
 	if err != nil {
-		return value, fmt.Errorf("The %v key header has not been obtained", key)
+		return value, err
 	}
 	return value, nil
 }
@@ -130,7 +130,7 @@ func (api APIRest) GetQueryParamValueString(queryParamName string, r *http.Reque
 func (api APIRest) GetQueryParamValueInt(queryParamName string, r *http.Request) (int, error) {
 	value, err := strconv.Atoi(r.URL.Query().Get(queryParamName))
 	if err != nil {
-		return value, fmt.Errorf("The query parameter %v has not been obtained", queryParamName)
+		return value, err
 	}
 	return value, nil
 }
@@ -139,7 +139,7 @@ func (api APIRest) GetQueryParamValueInt(queryParamName string, r *http.Request)
 func (api APIRest) GetQueryParamValueInt64(queryParamName string, r *http.Request) (int64, error) {
 	value, err := strconv.ParseInt(r.URL.Query().Get(queryParamName), 10, 64)
 	if err != nil {
-		return value, fmt.Errorf("The query parameter %v has not been obtained", queryParamName)
+		return value, err
 	}
 	return value, nil
 }
@@ -148,7 +148,7 @@ func (api APIRest) GetQueryParamValueInt64(queryParamName string, r *http.Reques
 func (api APIRest) GetQueryParamValueFloat64(queryParamName string, r *http.Request) (float64, error) {
 	value, err := strconv.ParseFloat(r.URL.Query().Get(queryParamName), 64)
 	if err != nil {
-		return value, fmt.Errorf("The query parameter %v has not been obtained", queryParamName)
+		return value, err
 	}
 	return value, nil
 }
@@ -157,7 +157,7 @@ func (api APIRest) GetQueryParamValueFloat64(queryParamName string, r *http.Requ
 func (api APIRest) GetQueryParamValueBool(queryParamName string, r *http.Request) (bool, error) {
 	value, err := strconv.ParseBool(r.URL.Query().Get(queryParamName))
 	if err != nil {
-		return false, fmt.Errorf("The query parameter %v has not been obtained", queryParamName)
+		return false, err
 	}
 	return value, nil
 }
