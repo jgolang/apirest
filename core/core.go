@@ -16,6 +16,7 @@ type API struct {
 	requestValidator APIRequestValidater
 	formatter        APIResponseFormatter
 	responder        APIResponder
+	MapMethods       map[string][]string
 }
 
 // Respond doc ...
@@ -42,4 +43,9 @@ func (api *API) RegisterNewAPIResponder(r APIResponder) {
 // RegisterNewAPIRequest doc ...
 func (api *API) RegisterNewAPIRequest(v APIRequestValidater) {
 	api.requestValidator = v
+}
+
+// AddMapMethod doc ...
+func (api *API) AddMapMethod(key string, methods []string) {
+	api.MapMethods[key] = methods
 }
