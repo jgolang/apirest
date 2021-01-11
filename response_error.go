@@ -39,5 +39,5 @@ func (err Error) Send(w http.ResponseWriter) {
 		err.ErrorCode = "1"
 	}
 
-	apiRest.Respond(core.ResponseData(err), w)
+	api.Respond(core.ResponseData(err), w)
 }

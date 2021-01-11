@@ -6,7 +6,7 @@ import (
 	"github.com/jgolang/apirest/core"
 )
 
-var apiRest = core.New(
+var api = core.New(
 	RequestValidator{},
 	ResponseFormatter{},
 	Responder{},
@@ -15,22 +15,22 @@ var apiRest = core.New(
 
 // RegisterNewAPIFormatter doc ...
 func RegisterNewAPIFormatter(f core.APIResponseFormatter) {
-	apiRest.RegisterNewAPIResponseFormatter(f)
+	api.RegisterNewAPIResponseFormatter(f)
 }
 
 // RegisterNewAPIResponder doc ...
 func RegisterNewAPIResponder(f core.APIResponder) {
-	apiRest.RegisterNewAPIResponder(f)
+	api.RegisterNewAPIResponder(f)
 }
 
 // RegisterNewAPIRequestValidator doc ...
 func RegisterNewAPIRequestValidator(v core.APIRequestValidater) {
-	apiRest.RegisterNewAPIRequestValidator(v)
+	api.RegisterNewAPIRequestValidator(v)
 }
 
 // AddNewMapMethod doc ...
 func AddNewMapMethod(key string, methods []string) {
-	apiRest.AddMapMethod(key, methods)
+	api.AddMapMethod(key, methods)
 }
 
 var mapMethods core.MapMethods

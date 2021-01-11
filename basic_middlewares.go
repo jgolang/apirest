@@ -82,8 +82,8 @@ var RequestBody = NewRequestBodyMiddleware(availableRequestbodymiddleware)
 func NewRequestBodyMiddleware(keyListMethods string) func(http.HandlerFunc) http.HandlerFunc {
 	return func(next http.HandlerFunc) http.HandlerFunc {
 		return func(w http.ResponseWriter, r *http.Request) {
-			if apiRest.ValidateMethods(keyListMethods, r.Method) {
-				requestData, err := apiRest.ValidateRequest(r)
+			if api.ValidateMethods(keyListMethods, r.Method) {
+				requestData, err := api.ValidateRequest(r)
 				if err != nil {
 					log.Error(err)
 					Error{}.Send(w)

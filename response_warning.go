@@ -35,5 +35,5 @@ func (warning Warning) Send(w http.ResponseWriter) {
 		warning.StatusCode = http.StatusOK
 	}
 
-	apiRest.Respond(core.ResponseData(warning), w)
+	api.Respond(core.ResponseData(warning), w)
 }

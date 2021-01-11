@@ -12,13 +12,13 @@ type JSONRequest struct {
 
 // JSONRequestInfo request info section fields for encrypted requests
 type JSONRequestInfo struct {
-	DeviceUUID  string `json:"uuid,omitempty"`
+	DeviceUUID  string `json:"device_uuid,omitempty"`
 	DeviceType  string `json:"device,omitempty"`
-	OS          string `json:"os,omitempty"`
+	DeviceOS    string `json:"device_os,omitempty"`
 	OSVersion   string `json:"os_version,omitempty"`
-	OSTimezone  int    `json:"timezone,omitempty"`
-	AppLanguage string `json:"lang,omitempty"`
+	OSTimezone  string `json:"os_timezone,omitempty"`
+	AppLanguage string `json:"app_lang,omitempty"`
 	AppVersion  string `json:"app_version,omitempty"`
-	SessionID   string `json:"session_id,omitempty"`
 	AppName     string `json:"app_name,omitempty"`
+	SessionID   string `json:"session_id,omitempty"`
 }

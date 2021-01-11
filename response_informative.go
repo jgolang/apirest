@@ -35,5 +35,5 @@ func (info Informative) Send(w http.ResponseWriter) {
 		info.StatusCode = http.StatusOK
 	}
 
-	apiRest.Respond(core.ResponseData(info), w)
+	api.Respond(core.ResponseData(info), w)
 }

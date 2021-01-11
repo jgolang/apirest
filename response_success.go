@@ -35,6 +35,6 @@ func (success Success) Send(w http.ResponseWriter) {
 		success.StatusCode = http.StatusOK
 	}
 
-	apiRest.Respond(core.ResponseData(success), w)
+	api.Respond(core.ResponseData(success), w)
 
 }

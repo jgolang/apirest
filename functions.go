@@ -23,7 +23,7 @@ func validate(username, password string) bool {
 
 // GetHeaderValueString doc ...
 func GetHeaderValueString(key string, r *http.Request) (string, Response) {
-	value, err := apiRest.GetHeaderValueString(key, r)
+	value, err := api.GetHeaderValueString(key, r)
 	if err != nil {
 		log.Error(err)
 		return value, Error{
@@ -36,7 +36,7 @@ func GetHeaderValueString(key string, r *http.Request) (string, Response) {
 
 // GetHeaderValueInt doc ...
 func GetHeaderValueInt(key string, r *http.Request) (int, Response) {
-	value, err := apiRest.GetHeaderValueInt(key, r)
+	value, err := api.GetHeaderValueInt(key, r)
 	if err != nil {
 		log.Error(err)
 		return value, Error{
@@ -49,7 +49,7 @@ func GetHeaderValueInt(key string, r *http.Request) (int, Response) {
 
 // GetHeaderValueInt64 doc ...
 func GetHeaderValueInt64(key string, r *http.Request) (int64, Response) {
-	value, err := apiRest.GetHeaderValueInt64(key, r)
+	value, err := api.GetHeaderValueInt64(key, r)
 	if err != nil {
 		log.Error(err)
 		return value, Error{
@@ -62,7 +62,7 @@ func GetHeaderValueInt64(key string, r *http.Request) (int64, Response) {
 
 // GetHeaderValueFloat64 doc ...
 func GetHeaderValueFloat64(key string, r *http.Request) (float64, Response) {
-	value, err := apiRest.GetHeaderValueFloat64(key, r)
+	value, err := api.GetHeaderValueFloat64(key, r)
 	if err != nil {
 		log.Error(err)
 		return value, Error{
@@ -75,7 +75,7 @@ func GetHeaderValueFloat64(key string, r *http.Request) (float64, Response) {
 
 // GetHeaderValueBool doc ...
 func GetHeaderValueBool(key string, r *http.Request) (bool, Response) {
-	value, err := apiRest.GetHeaderValueBool(key, r)
+	value, err := api.GetHeaderValueBool(key, r)
 	if err != nil {
 		log.Error(err)
 		return value, Error{
@@ -88,7 +88,7 @@ func GetHeaderValueBool(key string, r *http.Request) (bool, Response) {
 
 // GetRouteVarValueString ...
 func GetRouteVarValueString(urlVarName string, r *http.Request) (string, Response) {
-	value, err := apiRest.GetRouteVarValueString(urlVarName, r)
+	value, err := api.GetRouteVarValueString(urlVarName, r)
 	if err != nil {
 		log.Error(err)
 		return value, Error{
@@ -101,7 +101,7 @@ func GetRouteVarValueString(urlVarName string, r *http.Request) (string, Respons
 
 // GetRouteVarValueInt ...
 func GetRouteVarValueInt(urlVarName string, r *http.Request) (int, Response) {
-	value, err := apiRest.GetRouteVarValueInt(urlVarName, r)
+	value, err := api.GetRouteVarValueInt(urlVarName, r)
 	if err != nil {
 		log.Error(err)
 		return 0, Error{
@@ -114,7 +114,7 @@ func GetRouteVarValueInt(urlVarName string, r *http.Request) (int, Response) {
 
 // GetRouteVarValueInt64 ...
 func GetRouteVarValueInt64(urlVarName string, r *http.Request) (int64, Response) {
-	value, err := apiRest.GetRouteVarValueInt64(urlVarName, r)
+	value, err := api.GetRouteVarValueInt64(urlVarName, r)
 	if err != nil {
 		log.Error(err)
 		return value, Error{
@@ -127,7 +127,7 @@ func GetRouteVarValueInt64(urlVarName string, r *http.Request) (int64, Response)
 
 // GetRouteVarValueFloat64 ...
 func GetRouteVarValueFloat64(urlVarName string, r *http.Request) (float64, Response) {
-	value, err := apiRest.GetRouteVarValueFloat64(urlVarName, r)
+	value, err := api.GetRouteVarValueFloat64(urlVarName, r)
 	if err != nil {
 		log.Error(err)
 		return value, Error{
@@ -140,7 +140,7 @@ func GetRouteVarValueFloat64(urlVarName string, r *http.Request) (float64, Respo
 
 // GetRouteVarValueBool ...
 func GetRouteVarValueBool(urlVarName string, r *http.Request) (bool, Response) {
-	value, err := apiRest.GetRouteVarValueBool(urlVarName, r)
+	value, err := api.GetRouteVarValueBool(urlVarName, r)
 	if err != nil {
 		log.Error(err)
 		return value, Error{
@@ -153,7 +153,7 @@ func GetRouteVarValueBool(urlVarName string, r *http.Request) (bool, Response) {
 
 // GetQueryParamValueString ...
 func GetQueryParamValueString(queryParamName string, r *http.Request) (string, Response) {
-	value, err := apiRest.GetQueryParamValueString(queryParamName, r)
+	value, err := api.GetQueryParamValueString(queryParamName, r)
 	if err != nil {
 		log.Error(err)
 		return value, Error{
@@ -168,7 +168,7 @@ func GetQueryParamValueString(queryParamName string, r *http.Request) (string, R
 
 // GetQueryParamValueInt ...
 func GetQueryParamValueInt(queryParamName string, r *http.Request) (int, Response) {
-	value, err := apiRest.GetQueryParamValueInt(queryParamName, r)
+	value, err := api.GetQueryParamValueInt(queryParamName, r)
 	if err != nil {
 		log.Error(err)
 		return value, Error{
@@ -181,7 +181,7 @@ func GetQueryParamValueInt(queryParamName string, r *http.Request) (int, Respons
 
 // GetQueryParamValueInt64 ...
 func GetQueryParamValueInt64(queryParamName string, r *http.Request) (int64, Response) {
-	value, err := apiRest.GetQueryParamValueInt64(queryParamName, r)
+	value, err := api.GetQueryParamValueInt64(queryParamName, r)
 	if err != nil {
 		log.Error(err)
 		return value, Error{
@@ -194,7 +194,7 @@ func GetQueryParamValueInt64(queryParamName string, r *http.Request) (int64, Res
 
 // GetQueryParamValueFloat64 ...
 func GetQueryParamValueFloat64(queryParamName string, r *http.Request) (float64, Response) {
-	value, err := apiRest.GetQueryParamValueFloat64(queryParamName, r)
+	value, err := api.GetQueryParamValueFloat64(queryParamName, r)
 	if err != nil {
 		log.Error(err)
 		return value, Error{
@@ -207,7 +207,7 @@ func GetQueryParamValueFloat64(queryParamName string, r *http.Request) (float64,
 
 // GetQueryParamValueBool ...
 func GetQueryParamValueBool(queryParamName string, r *http.Request) (bool, Response) {
-	value, err := apiRest.GetQueryParamValueBool(queryParamName, r)
+	value, err := api.GetQueryParamValueBool(queryParamName, r)
 	if err != nil {
 		log.Error(err)
 		return value, Error{
@@ -220,7 +220,7 @@ func GetQueryParamValueBool(queryParamName string, r *http.Request) (bool, Respo
 
 // UnmarshalBody doc ...
 func UnmarshalBody(v interface{}, r *http.Request) Response {
-	err := apiRest.UnmarshalBody(v, r)
+	err := api.UnmarshalBody(v, r)
 	if err != nil {
 		log.Error(err)
 		return Error{
