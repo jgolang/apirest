@@ -234,32 +234,30 @@ func UnmarshalBody(v interface{}, r *http.Request) Response {
 }
 
 // PrintAPIRequest doc ...
-func PrintAPIRequest(method, uri, eventID, form string, header http.Header, rawBody []byte) {
-	log.Infof("REQUEST: [%v] %v", method, uri)
+func PrintAPIRequest(method, uri, eventID, form string, headers http.Header, rawBody []byte) {
 	if eventID != "" {
 		log.Infof("EVENT ID: %v", eventID)
 	}
-	log.Infof("HEADER:\n%v", header)
+	log.Infof("REQUEST: [%v] %v\nREQUEST HEADERS: %V", method, uri, headers)
 	if form != "" && len(form) != 0 {
 		if len(form) > 2000 && os.Getenv("PRINT_FULL_EVENT") == "" {
-			log.Infof("FORM:\n%v", form[:1000], "••• SKIPPED •••", form[:1000])
+			log.Infof("REQUEST FORM:\n%v", form[:1000], "••• SKIPPED •••", form[:1000])
 		} else {
-			log.Infof("FORM:\n%v", form)
+			log.Infof("REQUEST FORM:\n%v", form)
 		}
 	}
 	if rawBody != nil && len(rawBody) != 0 {
 		if len(rawBody) > 2000 && os.Getenv("PRINT_FULL_EVENT") == "" {
-			log.Infof("BODY:\n%v", string(rawBody[:1000]), " ••• SKIPPED ••• ", string(rawBody[len(rawBody)-1000:]))
+			log.Infof("REQUEST BODY:\n%v", string(rawBody[:1000]), " ••• SKIPPED ••• ", string(rawBody[len(rawBody)-1000:]))
 		} else {
-			log.Infof("BODY:\n%v", string(rawBody))
+			log.Infof("REQUEST BODY:\n%v", string(rawBody))
 		}
 	}
 }
 
 // PrintAPIResponse doc ...
 func PrintAPIResponse(res *httptest.ResponseRecorder) {
-	log.Infof("STATUS CODE: %v %v", res.Code, http.StatusText(res.Code))
-	log.Infof("HEADER:\n%v", res.Header())
+	log.Infof("STATUS CODE: %v %v\nRESPONSE HEADERS: %v", res.Code, http.StatusText(res.Code))
 	responseBody := res.Body.Bytes()
 	if responseBody != nil && len(responseBody) != 0 {
 		if len(responseBody) > 2000 && os.Getenv("PRINT_FULL_EVENT") == "" {

@@ -1,4 +1,4 @@
-github.com/jgolang/apirest/core v0.0.0-20210111112204-966e55801040 h1:K3PXnxCh/jn5r2nBn79FrMj5V79Pr43X4cgW4tJ05p8=
-github.com/jgolang/apirest/core v0.0.0-20210111112204-966e55801040/go.mod h1:bQyrUKG6RGXuFmaQ0EpdDNECbuuT9x1Hr2nyRnmbhnw=
+github.com/jgolang/apirest/core v0.0.0-20210111113412-aa2c5037d3be h1:dKN2LE+Z/5m+UwCMi57Gd6HXDGGO2zBjfqED91H2DHM=
+github.com/jgolang/apirest/core v0.0.0-20210111113412-aa2c5037d3be/go.mod h1:bQyrUKG6RGXuFmaQ0EpdDNECbuuT9x1Hr2nyRnmbhnw=
 github.com/jgolang/log v1.1.7 h1:CRwOSR3ddzbC/mZqVo2/T26hQ0vzxyX1bjym2aZaNEA=
 github.com/jgolang/log v1.1.7/go.mod h1:MGzJlSwBq0vzdM+8j0AoG4hYogeLC4BmansCKhH7FwA=
