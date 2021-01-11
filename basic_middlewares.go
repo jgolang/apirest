@@ -73,11 +73,8 @@ func RequestHeaderSession(next http.HandlerFunc) http.HandlerFunc {
 	}
 }
 
-// AvailableRequestbodymiddleware doc ..
-const AvailableRequestbodymiddleware = "availableRequestbodymiddleware"
-
 // RequestBody doc ...
-var RequestBody = NewRequestBodyMiddleware(AvailableRequestbodymiddleware)
+var RequestBody = NewRequestBodyMiddleware(PPPGMethodsKey)
 
 // NewRequestBodyMiddleware doc ...
 func NewRequestBodyMiddleware(keyListMethods string) core.Middleware {
