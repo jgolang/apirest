@@ -235,38 +235,38 @@ func UnmarshalBody(v interface{}, r *http.Request) Response {
 
 // PrintAPIRequest doc ...
 func PrintAPIRequest(method, uri, eventID, form string, header http.Header, rawBody []byte) {
-	log.Debugf("REQUEST: [%v] %v", method, uri)
+	log.Infof("REQUEST: [%v] %v", method, uri)
 	if eventID != "" {
-		log.Debugf("EVENT_ID: ", eventID)
+		log.Infof("EVENT_ID: ", eventID)
 	}
-	log.Debugf("HEADER: %v", header)
-	if rawBody != nil && len(rawBody) != 0 {
+	log.Infof("HEADER: %v", header)
+	if form != "" && len(form) != 0 {
 		if len(form) > 2000 && os.Getenv("PRINT_FULL_EVENT") == "" {
-			log.Debugf("FORM: ", form[:1000], "••• SKIPPED •••", form[:1000])
+			log.Infof("FORM: ", form[:1000], "••• SKIPPED •••", form[:1000])
 		} else {
-			log.Debugf("FORM: %v", form)
+			log.Infof("FORM: %v", form)
 		}
 	}
 	if rawBody != nil && len(rawBody) != 0 {
 		if len(rawBody) > 2000 && os.Getenv("PRINT_FULL_EVENT") == "" {
 			log.Debug("BODY: ", string(rawBody[:1000]), " ••• SKIPPED ••• ", string(rawBody[len(rawBody)-1000:]))
 		} else {
-			log.Debugf("FORM: ", string(rawBody))
+			log.Infof("BODY: ", string(rawBody))
 		}
 	}
 }
 
 // PrintAPIResponse doc ...
 func PrintAPIResponse(res *httptest.ResponseRecorder) {
-	log.Debugf("RESPONSE: %v", res.Result())
-	log.Debugf("STATUS CODE: %v %v", res.Code, http.StatusText(res.Code))
-	log.Debugf("HEADER: %v", res.Header())
+	log.Infof("RESPONSE: %v", res.Result())
+	log.Infof("STATUS CODE: %v %v", res.Code, http.StatusText(res.Code))
+	log.Infof("HEADER: %v", res.Header())
 	responseBody := res.Body.Bytes()
 	if responseBody != nil && len(responseBody) != 0 {
 		if len(responseBody) > 2000 && os.Getenv("PRINT_FULL_EVENT") == "" {
-			log.Debugf("BODY: ", string(responseBody[:1000]), " ••• SKIPPED ••• ", string(responseBody[len(responseBody)-1000:]))
+			log.Infof("RESPONSE BODY: \n", string(responseBody[:1000]), " ••• SKIPPED ••• ", string(responseBody[len(responseBody)-1000:]))
 		} else {
-			log.Debugf("BODY: ", string(responseBody))
+			log.Infof("RESPONSE BODY: \n", string(responseBody))
 		}
 	}
 }
