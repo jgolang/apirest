@@ -18,10 +18,15 @@ type API struct {
 	responder        APIResponder
 }
 
-// Respond ...
+// Respond doc ...
 func (api *API) Respond(data ResponseData, w http.ResponseWriter) {
 	responseFormatted := api.formatter.Format(data)
 	api.responder.Respond(responseFormatted, w)
+}
+
+// Validate doc ...
+func (api *API) Validate(r *http.Request) (*RequestData, error) {
+	return api.requestValidator.Validate(r)
 }
 
 // RegisterNewAPIResponseFormatter doc ...
