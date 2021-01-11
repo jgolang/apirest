@@ -113,7 +113,7 @@ func ContentExtractor(next http.HandlerFunc) http.HandlerFunc {
 		}
 
 		eventID := fmt.Sprintf("%v:%v:%v", prefixEventID, time.Now().UnixNano(), r.RequestURI)
-		go LogRequest(r.Method, r.RequestURI, eventID, r.Form.Encode(), r.Header, requestData.RawBody)
+		LogRequest(r.Method, r.RequestURI, eventID, r.Form.Encode(), r.Header, requestData.RawBody)
 
 		r.Header.Set("EventID", eventID)
 		r.Header.Set("DeviceUUID", requestData.DeviceUUID)
