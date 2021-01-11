@@ -44,8 +44,8 @@ func (api *API) RegisterNewAPIResponder(r APIResponder) {
 	api.responder = r
 }
 
-// RegisterNewAPIRequest doc ...
-func (api *API) RegisterNewAPIRequest(v APIRequestValidater) {
+// RegisterNewAPIRequestValidator doc ...
+func (api *API) RegisterNewAPIRequestValidator(v APIRequestValidater) {
 	api.requestValidator = v
 }
 
