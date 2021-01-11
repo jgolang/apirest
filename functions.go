@@ -233,8 +233,8 @@ func UnmarshalBody(v interface{}, r *http.Request) Response {
 	return nil
 }
 
-// PrintAPIRequest doc ...
-func PrintAPIRequest(method, uri, eventID, form string, headers http.Header, rawBody []byte) {
+// LogRequest doc ...
+func LogRequest(method, uri, eventID, form string, headers http.Header, rawBody []byte) {
 	if eventID != "" {
 		log.Infof("EVENT ID: %v", eventID)
 	}
@@ -255,9 +255,9 @@ func PrintAPIRequest(method, uri, eventID, form string, headers http.Header, raw
 	}
 }
 
-// PrintAPIResponse doc ...
-func PrintAPIResponse(res *httptest.ResponseRecorder) {
-	log.Infof("STATUS CODE: %v %v\nRESPONSE HEADERS: %v", res.Code, http.StatusText(res.Code), res.Header)
+// LogResponse doc ...
+func LogResponse(res *httptest.ResponseRecorder) {
+	log.Infof("STATUS CODE: %v %v\nRESPONSE HEADERS: %v", res.Code, http.StatusText(res.Code), res.Header())
 	responseBody := res.Body.Bytes()
 	if responseBody != nil && len(responseBody) != 0 {
 		if len(responseBody) > 2000 && os.Getenv("PRINT_FULL_EVENT") == "" {
