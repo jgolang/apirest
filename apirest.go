@@ -57,6 +57,7 @@ func AddNewMapMethod(key string, methods []string) {
 var mapMethods core.MapMethods
 
 func init() {
+	mapMethods = make(core.MapMethods)
 	mapMethods[PPPGMethodsKey] = []string{
 		http.MethodPost,
 		http.MethodGet,
