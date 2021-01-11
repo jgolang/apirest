@@ -84,13 +84,19 @@ func NewRequestBodyMiddleware(keyListMethods string) core.Middleware {
 				requestData, err := api.ValidateRequest(r)
 				if err != nil {
 					log.Error(err)
-					Error{}.Send(w)
+					Error{
+						Title:   "Invalid request content",
+						Message: "Request content empty json structure",
+					}.Send(w)
 					return
 				}
 				b, valid := requestData.Data.(json.RawMessage)
 				if !valid {
 					log.Error("Invalid Content...")
-					Error{}.Send(w)
+					Error{
+						Title:   "Invalid content",
+						Message: "Invalid content json structure",
+					}.Send(w)
 					return
 				}
 				r.Body = ioutil.NopCloser(bytes.NewBuffer(b))
