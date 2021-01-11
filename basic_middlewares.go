@@ -73,10 +73,11 @@ func RequestHeaderSession(next http.HandlerFunc) http.HandlerFunc {
 	}
 }
 
-const availableRequestbodymiddleware = "availableRequestbodymiddleware"
+// AvailableRequestbodymiddleware doc ..
+const AvailableRequestbodymiddleware = "availableRequestbodymiddleware"
 
 // RequestBody doc ...
-var RequestBody = NewRequestBodyMiddleware(availableRequestbodymiddleware)
+var RequestBody = NewRequestBodyMiddleware(AvailableRequestbodymiddleware)
 
 // NewRequestBodyMiddleware doc ...
 func NewRequestBodyMiddleware(keyListMethods string) core.Middleware {

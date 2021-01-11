@@ -36,7 +36,7 @@ func AddNewMapMethod(key string, methods []string) {
 var mapMethods core.MapMethods
 
 func init() {
-	mapMethods[availableRequestbodymiddleware] = []string{
+	mapMethods[AvailableRequestbodymiddleware] = []string{
 		http.MethodPost,
 		http.MethodGet,
 		http.MethodPut,
