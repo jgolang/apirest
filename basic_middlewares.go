@@ -141,9 +141,11 @@ func ContentExtractor(next http.HandlerFunc) http.HandlerFunc {
 
 		next.ServeHTTP(rec, r)
 
+		PrintAPIResponse(rec)
 		for k, v := range rec.Header() {
 			w.Header()[k] = v
 		}
-		PrintAPIResponse(rec)
+		w.WriteHeader(rec.Code)
+		w.Write(rec.Body.Bytes())
 	}
 }
