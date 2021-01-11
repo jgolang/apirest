@@ -3,38 +3,38 @@ package core
 import "net/http"
 
 // New doc ...
-func New(v APIRequestValidater, f APIResponseFormatter, r APIResponder) *APIRest {
-	return &APIRest{
+func New(v APIRequestValidater, f APIResponseFormatter, r APIResponder) *API {
+	return &API{
 		requestValidator: v,
 		formatter:        f,
 		responder:        r,
 	}
 }
 
-// APIRest doc ...
-type APIRest struct {
+// API doc ...
+type API struct {
 	requestValidator APIRequestValidater
 	formatter        APIResponseFormatter
 	responder        APIResponder
 }
 
 // Respond ...
-func (api *APIRest) Respond(data ResponseData, w http.ResponseWriter) {
+func (api *API) Respond(data ResponseData, w http.ResponseWriter) {
 	responseFormatted := api.formatter.Format(data)
 	api.responder.Respond(responseFormatted, w)
 }
 
 // RegisterNewAPIResponseFormatter doc ...
-func (api *APIRest) RegisterNewAPIResponseFormatter(f APIResponseFormatter) {
+func (api *API) RegisterNewAPIResponseFormatter(f APIResponseFormatter) {
 	api.formatter = f
 }
 
 // RegisterNewAPIResponder doc ...
-func (api *APIRest) RegisterNewAPIResponder(r APIResponder) {
+func (api *API) RegisterNewAPIResponder(r APIResponder) {
 	api.responder = r
 }
 
 // RegisterNewAPIRequest doc ...
-func (api *APIRest) RegisterNewAPIRequest(v APIRequestValidater) {
+func (api *API) RegisterNewAPIRequest(v APIRequestValidater) {
 	api.requestValidator = v
 }

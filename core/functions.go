@@ -9,7 +9,7 @@ import (
 )
 
 // GetRouteVarValueString ...
-func (api APIRest) GetRouteVarValueString(urlVarName string, r *http.Request) (string, error) {
+func (api API) GetRouteVarValueString(urlVarName string, r *http.Request) (string, error) {
 	vars := api.Vars(r)
 	value := vars[urlVarName]
 	if value == "" {
@@ -19,7 +19,7 @@ func (api APIRest) GetRouteVarValueString(urlVarName string, r *http.Request) (s
 }
 
 // GetRouteVarValueInt ...
-func (api APIRest) GetRouteVarValueInt(urlVarName string, r *http.Request) (int, error) {
+func (api API) GetRouteVarValueInt(urlVarName string, r *http.Request) (int, error) {
 	vars := api.Vars(r)
 	value, err := strconv.Atoi(vars[urlVarName])
 	if err != nil {
@@ -29,7 +29,7 @@ func (api APIRest) GetRouteVarValueInt(urlVarName string, r *http.Request) (int,
 }
 
 // GetRouteVarValueInt64 ...
-func (api APIRest) GetRouteVarValueInt64(urlVarName string, r *http.Request) (int64, error) {
+func (api API) GetRouteVarValueInt64(urlVarName string, r *http.Request) (int64, error) {
 	vars := api.Vars(r)
 	value, err := strconv.ParseInt(vars[urlVarName], 10, 64)
 	if err != nil {
@@ -39,7 +39,7 @@ func (api APIRest) GetRouteVarValueInt64(urlVarName string, r *http.Request) (in
 }
 
 // GetRouteVarValueFloat64 ...
-func (api APIRest) GetRouteVarValueFloat64(urlVarName string, r *http.Request) (float64, error) {
+func (api API) GetRouteVarValueFloat64(urlVarName string, r *http.Request) (float64, error) {
 	vars := api.Vars(r)
 	value, err := strconv.ParseFloat(vars[urlVarName], 64)
 	if err != nil {
@@ -49,7 +49,7 @@ func (api APIRest) GetRouteVarValueFloat64(urlVarName string, r *http.Request) (
 }
 
 // GetRouteVarValueBool ...
-func (api APIRest) GetRouteVarValueBool(urlVarName string, r *http.Request) (bool, error) {
+func (api API) GetRouteVarValueBool(urlVarName string, r *http.Request) (bool, error) {
 	vars := api.Vars(r)
 	value, err := strconv.ParseBool(vars[urlVarName])
 	if err != nil {
@@ -65,7 +65,7 @@ const (
 )
 
 // Vars returns the route variables for the current request, if any.
-func (api APIRest) Vars(r *http.Request) map[string]string {
+func (api API) Vars(r *http.Request) map[string]string {
 	if rv := r.Context().Value(varsKey); rv != nil {
 		return rv.(map[string]string)
 	}
@@ -73,7 +73,7 @@ func (api APIRest) Vars(r *http.Request) map[string]string {
 }
 
 // GetHeaderValueString doc ...
-func (api APIRest) GetHeaderValueString(key string, r *http.Request) (string, error) {
+func (api API) GetHeaderValueString(key string, r *http.Request) (string, error) {
 	value := r.Header.Get(key)
 	if value == "" {
 		return value, fmt.Errorf("The %v key header has not been obtained", key)
@@ -82,7 +82,7 @@ func (api APIRest) GetHeaderValueString(key string, r *http.Request) (string, er
 }
 
 // GetHeaderValueInt doc ...
-func (api APIRest) GetHeaderValueInt(key string, r *http.Request) (int, error) {
+func (api API) GetHeaderValueInt(key string, r *http.Request) (int, error) {
 	value, err := strconv.Atoi(r.Header.Get(key))
 	if err != nil {
 		return value, err
@@ -91,7 +91,7 @@ func (api APIRest) GetHeaderValueInt(key string, r *http.Request) (int, error) {
 }
 
 // GetHeaderValueInt64 doc ...
-func (api APIRest) GetHeaderValueInt64(key string, r *http.Request) (int64, error) {
+func (api API) GetHeaderValueInt64(key string, r *http.Request) (int64, error) {
 	value, err := strconv.ParseInt(r.Header.Get(key), 10, 64)
 	if err != nil {
 		return value, err
@@ -100,7 +100,7 @@ func (api APIRest) GetHeaderValueInt64(key string, r *http.Request) (int64, erro
 }
 
 // GetHeaderValueFloat64 doc ...
-func (api APIRest) GetHeaderValueFloat64(key string, r *http.Request) (float64, error) {
+func (api API) GetHeaderValueFloat64(key string, r *http.Request) (float64, error) {
 	value, err := strconv.ParseFloat(r.Header.Get(key), 64)
 	if err != nil {
 		return value, err
@@ -109,7 +109,7 @@ func (api APIRest) GetHeaderValueFloat64(key string, r *http.Request) (float64, 
 }
 
 // GetHeaderValueBool doc ...
-func (api APIRest) GetHeaderValueBool(key string, r *http.Request) (bool, error) {
+func (api API) GetHeaderValueBool(key string, r *http.Request) (bool, error) {
 	value, err := strconv.ParseBool(r.Header.Get(key))
 	if err != nil {
 		return value, err
@@ -118,7 +118,7 @@ func (api APIRest) GetHeaderValueBool(key string, r *http.Request) (bool, error)
 }
 
 // GetQueryParamValueString ...
-func (api APIRest) GetQueryParamValueString(queryParamName string, r *http.Request) (string, error) {
+func (api API) GetQueryParamValueString(queryParamName string, r *http.Request) (string, error) {
 	value := r.URL.Query().Get(queryParamName)
 	if value == "" {
 		return value, fmt.Errorf("The query parameter %v has not been obtained", queryParamName)
@@ -127,7 +127,7 @@ func (api APIRest) GetQueryParamValueString(queryParamName string, r *http.Reque
 }
 
 // GetQueryParamValueInt ...
-func (api APIRest) GetQueryParamValueInt(queryParamName string, r *http.Request) (int, error) {
+func (api API) GetQueryParamValueInt(queryParamName string, r *http.Request) (int, error) {
 	value, err := strconv.Atoi(r.URL.Query().Get(queryParamName))
 	if err != nil {
 		return value, err
@@ -136,7 +136,7 @@ func (api APIRest) GetQueryParamValueInt(queryParamName string, r *http.Request)
 }
 
 // GetQueryParamValueInt64 ...
-func (api APIRest) GetQueryParamValueInt64(queryParamName string, r *http.Request) (int64, error) {
+func (api API) GetQueryParamValueInt64(queryParamName string, r *http.Request) (int64, error) {
 	value, err := strconv.ParseInt(r.URL.Query().Get(queryParamName), 10, 64)
 	if err != nil {
 		return value, err
@@ -145,7 +145,7 @@ func (api APIRest) GetQueryParamValueInt64(queryParamName string, r *http.Reques
 }
 
 // GetQueryParamValueFloat64 ...
-func (api APIRest) GetQueryParamValueFloat64(queryParamName string, r *http.Request) (float64, error) {
+func (api API) GetQueryParamValueFloat64(queryParamName string, r *http.Request) (float64, error) {
 	value, err := strconv.ParseFloat(r.URL.Query().Get(queryParamName), 64)
 	if err != nil {
 		return value, err
@@ -154,7 +154,7 @@ func (api APIRest) GetQueryParamValueFloat64(queryParamName string, r *http.Requ
 }
 
 // GetQueryParamValueBool ...
-func (api APIRest) GetQueryParamValueBool(queryParamName string, r *http.Request) (bool, error) {
+func (api API) GetQueryParamValueBool(queryParamName string, r *http.Request) (bool, error) {
 	value, err := strconv.ParseBool(r.URL.Query().Get(queryParamName))
 	if err != nil {
 		return false, err
@@ -163,7 +163,7 @@ func (api APIRest) GetQueryParamValueBool(queryParamName string, r *http.Request
 }
 
 // UnmarshalBody doc ...
-func (api APIRest) UnmarshalBody(v interface{}, r *http.Request) error {
+func (api API) UnmarshalBody(v interface{}, r *http.Request) error {
 	bodyRequest, err := ioutil.ReadAll(r.Body)
 	if err != nil {
 		return err
