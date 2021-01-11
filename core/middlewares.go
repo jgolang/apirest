@@ -54,11 +54,11 @@ func MiddlewaresChain(mw ...Middleware) Middleware {
 // 	log.Infof("BODY: \n%v", bodyStr)
 // }
 
-// ValidateRequest doc ...
-func (api APIRest) ValidateRequest(r *http.Request) error {
-	err := api.UnmarshalBody(&api.request, r)
-	if err != nil {
-		return err
-	}
-	return nil
-}
+// // ValidateRequest doc ...
+// func (api APIRest) ValidateRequest(r *http.Request) error {
+// 	err := api.UnmarshalBody(&api.Request, r)
+// 	if err != nil {
+// 		return err
+// 	}
+// 	return nil
+// }
