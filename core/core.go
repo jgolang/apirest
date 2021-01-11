@@ -24,9 +24,9 @@ func (api *API) Respond(data ResponseData, w http.ResponseWriter) {
 	api.responder.Respond(responseFormatted, w)
 }
 
-// Validate doc ...
-func (api *API) Validate(r *http.Request) (*RequestData, error) {
-	return api.requestValidator.Validate(r)
+// ValidateRequest doc ...
+func (api *API) ValidateRequest(r *http.Request) (*RequestData, error) {
+	return api.requestValidator.ValidateRequest(r)
 }
 
 // RegisterNewAPIResponseFormatter doc ...
