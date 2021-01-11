@@ -113,7 +113,7 @@ func ContentExtractor(next http.HandlerFunc) http.HandlerFunc {
 		}
 
 		eventID := fmt.Sprintf("%v:%v:%v", prefixEventID, time.Now().UnixNano(), r.RequestURI)
-		LogRequest(r.Method, r.RequestURI, eventID, r.Form.Encode(), r.Header, requestData.RawBody)
+		go LogRequest(r.Method, r.RequestURI, eventID, r.Form.Encode(), r.Header, requestData.RawBody)
 
 		r.Header.Set("EventID", eventID)
 		r.Header.Set("DeviceUUID", requestData.DeviceUUID)
@@ -141,7 +141,7 @@ func ContentExtractor(next http.HandlerFunc) http.HandlerFunc {
 
 		next.ServeHTTP(rec, r)
 
-		LogResponse(rec)
+		go LogResponse(rec)
 		for k, v := range rec.Header() {
 			w.Header()[k] = v
 		}
