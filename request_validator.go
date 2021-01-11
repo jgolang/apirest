@@ -1,6 +1,8 @@
 package apirest
 
 import (
+	"encoding/json"
+	"io/ioutil"
 	"net/http"
 
 	"github.com/jgolang/apirest/core"
@@ -12,10 +14,16 @@ type RequestValidator struct{}
 // ValidateRequest doc
 func (v RequestValidator) ValidateRequest(r *http.Request) (*core.RequestData, error) {
 	var request JSONRequest
-	err := api.UnmarshalBody(&request, r)
+
+	rawBody, err := ioutil.ReadAll(r.Body)
 	if err != nil {
 		return nil, err
 	}
+	err = json.Unmarshal(rawBody, &request)
+	if err != nil {
+		return nil, err
+	}
+
 	requestData := core.RequestData{
 		DeviceUUID:  request.Info.DeviceUUID,
 		DeviceType:  request.Info.DeviceType,
@@ -26,6 +34,7 @@ func (v RequestValidator) ValidateRequest(r *http.Request) (*core.RequestData, e
 		AppVersion:  request.Info.AppVersion,
 		AppName:     request.Info.AppName,
 		SessionID:   request.Info.SessionID,
+		RawBody:     rawBody,
 		Data:        request.Content,
 	}
 	return &requestData, nil
