@@ -112,7 +112,7 @@ func ContentExtractor(next http.HandlerFunc) http.HandlerFunc {
 			prefixEventID = proxiedIPAddress
 		}
 
-		eventID := fmt.Sprintf("%v_%v %v", prefixEventID, time.Now().UnixNano(), r.RequestURI)
+		eventID := fmt.Sprintf("%v:%v:%v", prefixEventID, time.Now().UnixNano(), r.RequestURI)
 		PrintAPIRequest(r.Method, r.RequestURI, eventID, r.Form.Encode(), r.Header, requestData.RawBody)
 
 		r.Header.Set("EventID", eventID)
