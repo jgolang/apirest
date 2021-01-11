@@ -238,7 +238,7 @@ func PrintAPIRequest(method, uri, eventID, form string, headers http.Header, raw
 	if eventID != "" {
 		log.Infof("EVENT ID: %v", eventID)
 	}
-	log.Infof("REQUEST: [%v] %v\nREQUEST HEADERS: %V", method, uri, headers)
+	log.Infof("REQUEST: [%v] %v\nREQUEST HEADERS: %v", method, uri, headers)
 	if form != "" && len(form) != 0 {
 		if len(form) > 2000 && os.Getenv("PRINT_FULL_EVENT") == "" {
 			log.Infof("REQUEST FORM:\n%v", form[:1000], "••• SKIPPED •••", form[:1000])
@@ -257,7 +257,7 @@ func PrintAPIRequest(method, uri, eventID, form string, headers http.Header, raw
 
 // PrintAPIResponse doc ...
 func PrintAPIResponse(res *httptest.ResponseRecorder) {
-	log.Infof("STATUS CODE: %v %v\nRESPONSE HEADERS: %v", res.Code, http.StatusText(res.Code))
+	log.Infof("STATUS CODE: %v %v\nRESPONSE HEADERS: %v", res.Code, http.StatusText(res.Code), res.Header)
 	responseBody := res.Body.Bytes()
 	if responseBody != nil && len(responseBody) != 0 {
 		if len(responseBody) > 2000 && os.Getenv("PRINT_FULL_EVENT") == "" {
