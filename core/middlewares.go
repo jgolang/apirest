@@ -20,45 +20,12 @@ func MiddlewaresChain(mw ...Middleware) Middleware {
 				last = mw[i](last)
 			}
 			res := httptest.NewRecorder()
-			// printAPIRequest(r)
 			last(res, r)
 			for i, header := range res.Header() {
 				w.Header()[i] = header
 			}
 			w.WriteHeader(res.Code)
 			w.Write(res.Body.Bytes())
-			// printAPIResponse(res)
 		}
 	}
 }
-
-// func printAPIRequest(r *http.Request) {
-// 	byteBody, err := ioutil.ReadAll(r.Body)
-// 	if err != nil {
-// 		log.Fatal(err)
-// 	}
-// 	log.Infof("REQUEST: %v %v", r.Method, r.RequestURI)
-// 	log.Infof("HEADER: %v", r.Header)
-// 	log.Infof("FORM: %v", r.Form.Encode())
-// 	log.Infof("BODY: \n%v", string(byteBody))
-// 	r.Body = ioutil.NopCloser(bytes.NewBuffer(byteBody))
-// }
-
-// func printAPIResponse(res *httptest.ResponseRecorder) {
-// 	buf := new(bytes.Buffer)
-// 	buf.ReadFrom(res.Body)
-// 	bodyStr := buf.String()
-// 	log.Infof("RESPONSE: %v", res.Result())
-// 	log.Infof("STATUS CODE: %v %v", res.Code, http.StatusText(res.Code))
-// 	log.Infof("HEADER: %v", res.Header())
-// 	log.Infof("BODY: \n%v", bodyStr)
-// }
-
-// // ValidateRequest doc ...
-// func (api APIRest) ValidateRequest(r *http.Request) error {
-// 	err := api.UnmarshalBody(&api.Request, r)
-// 	if err != nil {
-// 		return err
-// 	}
-// 	return nil
-// }
