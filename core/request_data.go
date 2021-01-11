@@ -13,6 +13,7 @@ type RequestData struct {
 	SessionID      string
 	Headers        map[string]string
 	AdditionalInfo map[string]string
+	RawBody        []byte
 	Data           interface{}
 }
 
