@@ -1,26 +1,27 @@
 package apirest
 
-import "net/http"
+import (
+	"net/http"
+
+	"github.com/jgolang/apirest/core"
+)
 
 var (
 	// DefaultSuccessTitle doc ...
 	DefaultSuccessTitle = "Successful!"
 	// DefaultSuccessMessage doc ..
 	DefaultSuccessMessage = "The request has been successful!"
+	// SuccessType success response type the value is "success"
+	SuccessType core.ResponseType = "success"
 )
 
 // Success success response type the value is "success"
-type Success struct {
-	Title      string
-	Message    string
-	StatusCode int
-	Action     string
-	SessionID  string
-	Content    interface{}
-}
+type Success core.ResponseData
 
-// SetResponse success ...
-func (success Success) setResponse() ResponseData {
+// Send ...
+func (success Success) Send(w http.ResponseWriter) {
+
+	success.ResponseType = SuccessType
 
 	if success.Title == "" {
 		success.Title = DefaultSuccessTitle
@@ -34,19 +35,6 @@ func (success Success) setResponse() ResponseData {
 		success.StatusCode = http.StatusOK
 	}
 
-	return ResponseData{
-		Title:      success.Title,
-		Message:    success.Message,
-		StatusCode: success.StatusCode,
-		Type:       SuccessType,
-		Action:     success.Action,
-		SessionID:  success.SessionID,
-		Content:    success.Content,
-	}
+	apiRest.Respond(core.ResponseData(success), w)
 
-}
-
-// Send ...
-func (success Success) Send(w http.ResponseWriter) {
-	SendResponse(success, w)
 }

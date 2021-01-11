@@ -1,26 +1,27 @@
 package apirest
 
-import "net/http"
+import (
+	"net/http"
+
+	"github.com/jgolang/apirest/core"
+)
 
 var (
 	// DefaultErrorTitle doc ...
 	DefaultErrorTitle = "Error response!"
 	// DefaultErrorMessage doc ..
 	DefaultErrorMessage = "The service has not completed the operation!"
+	// ErrorType error response type the value is "error"
+	ErrorType core.ResponseType = "error"
 )
 
 // Error error response type the value is "error"
-type Error struct {
-	Title      string
-	Message    string
-	StatusCode int
-	Action     string
-	SessionID  string
-	Content    interface{}
-}
+type Error core.ResponseData
 
-// SetResponse error ...
-func (err Error) setResponse() ResponseData {
+// Send ...
+func (err Error) Send(w http.ResponseWriter) {
+
+	err.ResponseType = ErrorType
 
 	if err.Title == "" {
 		err.Title = DefaultErrorTitle
@@ -32,22 +33,11 @@ func (err Error) setResponse() ResponseData {
 
 	if err.StatusCode == 0 {
 		err.StatusCode = http.StatusBadRequest
-
 	}
 
-	return ResponseData{
-		Title:      err.Title,
-		Message:    err.Message,
-		StatusCode: err.StatusCode,
-		Type:       ErrorType,
-		Action:     err.Action,
-		SessionID:  err.SessionID,
-		Content:    err.Content,
+	if err.ErrorCode == "0" {
+		err.ErrorCode = "1"
 	}
 
-}
-
-// Send ...
-func (err Error) Send(w http.ResponseWriter) {
-	SendResponse(err, w)
+	apiRest.Respond(core.ResponseData(err), w)
 }

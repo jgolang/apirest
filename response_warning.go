@@ -1,26 +1,27 @@
 package apirest
 
-import "net/http"
+import (
+	"net/http"
+
+	"github.com/jgolang/apirest/core"
+)
 
 var (
 	// DefaultWarningTitle doc ...
 	DefaultWarningTitle = "Alert!"
 	// DefaultWarningMessage doc ..
 	DefaultWarningMessage = "The application has been successful but with potential problems!"
+	// WarningType warning response type the value is "warning"
+	WarningType core.ResponseType = "warning"
 )
 
 // Warning warning response type the value is "warning"
-type Warning struct {
-	Title      string
-	Message    string
-	StatusCode int
-	Action     string
-	SessionID  string
-	Content    interface{}
-}
+type Warning core.ResponseData
 
-// SetResponse warning ...
-func (warning Warning) setResponse() ResponseData {
+// Send ...
+func (warning Warning) Send(w http.ResponseWriter) {
+
+	warning.ResponseType = WarningType
 
 	if warning.Title == "" {
 		warning.Title = DefaultWarningTitle
@@ -34,18 +35,5 @@ func (warning Warning) setResponse() ResponseData {
 		warning.StatusCode = http.StatusOK
 	}
 
-	return ResponseData{
-		Title:      warning.Title,
-		Message:    warning.Message,
-		StatusCode: warning.StatusCode,
-		Type:       WarningType,
-		Action:     warning.Action,
-		SessionID:  warning.SessionID,
-		Content:    warning.Content,
-	}
-}
-
-// Send ...
-func (warning Warning) Send(w http.ResponseWriter) {
-	SendResponse(warning, w)
+	apiRest.Respond(core.ResponseData(warning), w)
 }

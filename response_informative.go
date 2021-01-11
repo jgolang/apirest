@@ -1,26 +1,27 @@
 package apirest
 
-import "net/http"
+import (
+	"net/http"
+
+	"github.com/jgolang/apirest/core"
+)
 
 var (
 	// DefaultInfoTitle doc ...
 	DefaultInfoTitle = "Information!"
 	// DefaultInfoMessage doc ..
 	DefaultInfoMessage = "The request has been successful!"
+	// InformativeType info response type the value is "info"
+	InformativeType core.ResponseType = "info"
 )
 
 // Informative info response type the value is "info"
-type Informative struct {
-	Title      string
-	Message    string
-	StatusCode int
-	Action     string
-	SessionID  string
-	Content    interface{}
-}
+type Informative core.ResponseData
 
-// SetResponse informative ...
-func (info Informative) setResponse() ResponseData {
+// Send ...
+func (info Informative) Send(w http.ResponseWriter) {
+
+	info.ResponseType = InformativeType
 
 	if info.Title == "" {
 		info.Title = DefaultInfoTitle
@@ -34,19 +35,5 @@ func (info Informative) setResponse() ResponseData {
 		info.StatusCode = http.StatusOK
 	}
 
-	return ResponseData{
-		Title:      info.Title,
-		Message:    info.Message,
-		StatusCode: info.StatusCode,
-		Type:       InformativeType,
-		Action:     info.Action,
-		SessionID:  info.SessionID,
-		Content:    info.Content,
-	}
-
-}
-
-// Send ...
-func (info Informative) Send(w http.ResponseWriter) {
-	SendResponse(info, w)
+	apiRest.Respond(core.ResponseData(info), w)
 }

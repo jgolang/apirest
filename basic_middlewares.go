@@ -3,10 +3,18 @@ package apirest
 import (
 	"bytes"
 	"encoding/base64"
+	"encoding/json"
 	"io/ioutil"
 	"net/http"
 	"strings"
+
+	"github.com/jgolang/apirest/core"
+	"github.com/jgolang/log"
 )
+
+// MiddlewaresChain provides syntactic sugar to create a new middleware
+// which will be the result of chaining the ones received as parameters
+var MiddlewaresChain = core.MiddlewaresChain
 
 // BasicAuth ...
 func BasicAuth(next http.HandlerFunc) http.HandlerFunc {
@@ -58,37 +66,38 @@ func RequestHeaderJSON(next http.HandlerFunc) http.HandlerFunc {
 
 // RequestHeaderSession doc ...
 func RequestHeaderSession(next http.HandlerFunc) http.HandlerFunc {
-
 	return func(w http.ResponseWriter, r *http.Request) {
 		sessionID := r.Header.Get("SessionId")
 		w.Header().Set("SessionId", sessionID)
 		next.ServeHTTP(w, r)
 	}
-
 }
 
+const availableRequestbodymiddleware = "availableRequestbodymiddleware"
+
 // RequestBody doc ...
-func RequestBody(next http.HandlerFunc) http.HandlerFunc {
+var RequestBody = NewRequestBodyMiddleware(availableRequestbodymiddleware)
 
-	return func(w http.ResponseWriter, r *http.Request) {
-
-		if r.Method == http.MethodPost || r.Method == http.MethodPut || r.Method == http.MethodPatch {
-
-			var reqStruct JSONRequest
-
-			response := UnmarshalBody(&reqStruct, r)
-			if response != nil {
-				response.Send(w)
-				return
+// NewRequestBodyMiddleware doc ...
+func NewRequestBodyMiddleware(keyListMethods string) func(http.HandlerFunc) http.HandlerFunc {
+	return func(next http.HandlerFunc) http.HandlerFunc {
+		return func(w http.ResponseWriter, r *http.Request) {
+			if apiRest.ValidateMethods(keyListMethods, r.Method) {
+				requestData, err := apiRest.ValidateRequest(r)
+				if err != nil {
+					log.Error(err)
+					Error{}.Send(w)
+					return
+				}
+				b, valid := requestData.Data.(json.RawMessage)
+				if !valid {
+					log.Error("Invalid Content...")
+					Error{}.Send(w)
+					return
+				}
+				r.Body = ioutil.NopCloser(bytes.NewBuffer(b))
 			}
-
-			r.Header.Set("Request-Content", string(reqStruct.Content))
-			r.Body = ioutil.NopCloser(bytes.NewBuffer(reqStruct.Content))
-
+			next.ServeHTTP(w, r)
 		}
-
-		next.ServeHTTP(w, r)
-
 	}
-
 }
