@@ -79,7 +79,7 @@ const availableRequestbodymiddleware = "availableRequestbodymiddleware"
 var RequestBody = NewRequestBodyMiddleware(availableRequestbodymiddleware)
 
 // NewRequestBodyMiddleware doc ...
-func NewRequestBodyMiddleware(keyListMethods string) func(http.HandlerFunc) http.HandlerFunc {
+func NewRequestBodyMiddleware(keyListMethods string) core.Middleware {
 	return func(next http.HandlerFunc) http.HandlerFunc {
 		return func(w http.ResponseWriter, r *http.Request) {
 			if api.ValidateMethods(keyListMethods, r.Method) {
