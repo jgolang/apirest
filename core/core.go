@@ -3,11 +3,12 @@ package core
 import "net/http"
 
 // New doc ...
-func New(v APIRequestValidater, f APIResponseFormatter, r APIResponder) *API {
+func New(v APIRequestValidater, f APIResponseFormatter, r APIResponder, mapMethods *MapMethods) *API {
 	return &API{
 		requestValidator: v,
 		formatter:        f,
 		responder:        r,
+		MapMethods:       mapMethods,
 	}
 }
 
@@ -16,8 +17,11 @@ type API struct {
 	requestValidator APIRequestValidater
 	formatter        APIResponseFormatter
 	responder        APIResponder
-	MapMethods       map[string]*[]string
+	MapMethods       *MapMethods
 }
+
+// MapMethods doc ...
+type MapMethods map[string][]string
 
 // Respond doc ...
 func (api *API) Respond(data ResponseData, w http.ResponseWriter) {
@@ -46,6 +50,8 @@ func (api *API) RegisterNewAPIRequest(v APIRequestValidater) {
 }
 
 // AddMapMethod doc ...
-func (api *API) AddMapMethod(key string, methods *[]string) {
-	api.MapMethods[key] = methods
+func (api *API) AddMapMethod(key string, methods []string) {
+	mapMethods := *api.MapMethods
+	mapMethods[key] = methods
+	api.MapMethods = &mapMethods
 }
