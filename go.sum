@@ -1,6 +1,6 @@
-github.com/jgolang/apirest/core v0.0.0-20210112061811-b452ce2e4061 h1:1XSaHmndwq43oFCwaqywU57IsptSNTehJxd0pP0iQGA=
-github.com/jgolang/apirest/core v0.0.0-20210112061811-b452ce2e4061/go.mod h1:bQyrUKG6RGXuFmaQ0EpdDNECbuuT9x1Hr2nyRnmbhnw=
-github.com/jgolang/log v1.2.0 h1:acbzwqUGM7P+8MXeVlkG/lUJ+cmEgH8aA2Cm4aTeegw=
-github.com/jgolang/log v1.2.0/go.mod h1:3aDWpmjnVvT0j7Baa/PXtS743bWpHpsueHS+C5STrKo=
-github.com/jgolang/log/core v0.0.0-20210112060917-fc4af39e5bd8 h1:x94j/0QV0zxMtZq3CCUr7G8h3+g8xtlqbseoGTByEdY=
-github.com/jgolang/log/core v0.0.0-20210112060917-fc4af39e5bd8/go.mod h1:yAJEmWS5nrArG/oCp7YNaJYBq04DKSs6TtcU/5VRIO4=
+github.com/jgolang/apirest/core v0.0.0-20210112064015-6c13945055fa h1:s2GvcPbkUH+nLZtGJBnlo1nDX5j46Cmkq7bfa3bLnE0=
+github.com/jgolang/apirest/core v0.0.0-20210112064015-6c13945055fa/go.mod h1:bQyrUKG6RGXuFmaQ0EpdDNECbuuT9x1Hr2nyRnmbhnw=
+github.com/jgolang/log v1.2.2 h1:HVZpxKo1DratGjjMiYPpWGlryyubcKFc8NGFaeTqGY0=
+github.com/jgolang/log v1.2.2/go.mod h1:kAqTFFUa+y3MbmNFde4r15yCqzTv7wJabz98gREvBf0=
+github.com/jgolang/log/core v0.0.0-20210112062349-a4a456cfeae7 h1:WhEaz610L1rgDqxdsbhN82qYS4rW2JZPuSQvdgl4Xyg=
+github.com/jgolang/log/core v0.0.0-20210112062349-a4a456cfeae7/go.mod h1:yAJEmWS5nrArG/oCp7YNaJYBq04DKSs6TtcU/5VRIO4=
