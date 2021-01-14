@@ -1,6 +1,9 @@
 package core
 
-import "net/http"
+import (
+	"encoding/json"
+	"net/http"
+)
 
 // New doc ...
 func New(v APIRequestValidater, f APIResponseFormatter, r APIResponder, s APISecurity, mapMethods *MapMethods) *API {
@@ -46,18 +49,8 @@ func (api *API) RegisterNewAPIResponder(r APIResponder) {
 	api.responder = r
 }
 
-// ValidateBasicToken doc ...
-func (api *API) ValidateBasicToken(token string) bool {
-	return api.security.ValidateBasicToken(token)
-}
-
-// ValidateBearerToken doc ...
-func (api *API) ValidateBearerToken(token string) bool {
-	return api.security.ValidateBearerToken(token)
-}
-
 // ValidateCustomToken doc ...
-func (api *API) ValidateCustomToken(token string, customValidator func(string) bool) bool {
+func (api *API) ValidateCustomToken(token string, customValidator CustomTokenValidator) (json.RawMessage, bool) {
 	return api.security.ValidateCustomToken(token, customValidator)
 }
 

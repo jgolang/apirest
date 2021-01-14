@@ -11,10 +11,3 @@ type APIResponseFormatter interface {
 type APIResponder interface {
 	Respond(*ResponseFormatted, http.ResponseWriter)
 }
-
-// APISecurity doc ...
-type APISecurity interface {
-	ValidateBasicToken(token string) bool
-	ValidateBearerToken(token string) bool
-	ValidateCustomToken(token string, validator func(string) bool) bool
-}
