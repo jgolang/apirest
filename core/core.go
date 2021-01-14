@@ -3,11 +3,12 @@ package core
 import "net/http"
 
 // New doc ...
-func New(v APIRequestValidater, f APIResponseFormatter, r APIResponder, mapMethods *MapMethods) *API {
+func New(v APIRequestValidater, f APIResponseFormatter, r APIResponder, s APISecurity, mapMethods *MapMethods) *API {
 	return &API{
 		requestValidator: v,
 		formatter:        f,
 		responder:        r,
+		security:         s,
 		MapMethods:       mapMethods,
 	}
 }
