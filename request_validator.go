@@ -14,7 +14,6 @@ type RequestValidator struct{}
 // ValidateRequest doc
 func (v RequestValidator) ValidateRequest(r *http.Request) (*core.RequestData, error) {
 	var request JSONRequest
-
 	rawBody, err := ioutil.ReadAll(r.Body)
 	if err != nil {
 		return nil, err
@@ -23,7 +22,6 @@ func (v RequestValidator) ValidateRequest(r *http.Request) (*core.RequestData, e
 	if err != nil {
 		return nil, err
 	}
-
 	requestData := core.RequestData{
 		DeviceUUID:  request.Info.DeviceUUID,
 		DeviceType:  request.Info.DeviceType,

@@ -33,30 +33,32 @@ var (
 // which will be the result of chaining the ones received as parameters
 var MiddlewaresChain = core.MiddlewaresChain
 
-// // ValidateBasicToken middleware ...
-// func ValidateBasicToken(next http.HandlerFunc) http.HandlerFunc {
-// 	return func(w http.ResponseWriter, r *http.Request) {
-// 		auth := strings.SplitN(r.Header.Get("Authorization"), " ", 2)
-// 		if len(auth) != 2 || auth[0] != "Basic" {
-// 			Error{
-// 				Title:      DefaultUnauthorizedTitle,
-// 				Message:    DefaultInvalidAuthHeaderMsg,
-// 				StatusCode: http.StatusUnauthorized,
-// 			}.Send(w)
-// 			return
-// 		}
-// 		id, secret, tokenValid := api.Validate(auth[1])
-// 		if !tokenValid {
-// 			Error{
-// 				Title:      DefaultUnauthorizedTitle,
-// 				Message:    DefaultBasicUnauthorizedMsg,
-// 				StatusCode: http.StatusUnauthorized,
-// 			}.Send(w)
-// 			return
-// 		}
-// 		next(w, r)
-// 	}
-// }
+// ValidateBasicToken middleware ...
+func ValidateBasicToken(next http.HandlerFunc) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		auth := strings.SplitN(r.Header.Get("Authorization"), " ", 2)
+		if len(auth) != 2 || auth[0] != "Basic" {
+			Error{
+				Title:      DefaultUnauthorizedTitle,
+				Message:    DefaultInvalidAuthHeaderMsg,
+				StatusCode: http.StatusUnauthorized,
+			}.Send(w)
+			return
+		}
+		client, secret, tokenValid := api.ValidateBasicToken(auth[1])
+		if !tokenValid {
+			Error{
+				Title:      DefaultUnauthorizedTitle,
+				Message:    DefaultBasicUnauthorizedMsg,
+				StatusCode: http.StatusUnauthorized,
+			}.Send(w)
+			return
+		}
+		r.Header.Set("Basic-Client", client)
+		r.Header.Set("Basic-Secret", secret)
+		next(w, r)
+	}
+}
 
 // ValidateCustomToken middleware ...
 func ValidateCustomToken(next http.HandlerFunc) http.HandlerFunc {

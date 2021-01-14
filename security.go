@@ -9,24 +9,22 @@ import (
 )
 
 var (
-	// Username doc ...
-	Username = "test"
-	// Password doc ...
-	Password = "test"
+	// Username basic authentication
+	// Default: admin
+	Username = "admin"
+	// Password basic authentication
+	// Default: admin
+	Password = "admin"
 )
 
 // Security core interface implement
-type Security struct {
-}
-
-// CustomTokenValidatorFunc doc ...
-var CustomTokenValidatorFunc core.CustomTokenValidator
+type Security struct{}
 
 // ValidateBasicToken doc ...
 func (s *Security) ValidateBasicToken(token string) (client, secret string, valid bool) {
 	payload, _ := base64.StdEncoding.DecodeString(token)
 	pair := strings.SplitN(string(payload), ":", 2)
-	if len(pair) != 2 || !validate(pair[0], pair[1]) {
+	if len(pair) != 2 || !ValidateCredentialsFunc(pair[0], pair[1]) {
 		return "", "", false
 	}
 	return pair[0], pair[1], true
@@ -37,7 +35,7 @@ func (s *Security) ValidateCustomToken(token string, validator core.CustomTokenV
 	return validator(token)
 }
 
-func validate(username, password string) bool {
+func validateCredentials(username, password string) bool {
 	if username == Username && password == Password {
 		return true
 	}
@@ -47,3 +45,12 @@ func validate(username, password string) bool {
 func validateCustomToken(token string) (json.RawMessage, bool) {
 	return api.ValidateCustomToken(token, CustomTokenValidatorFunc)
 }
+
+// ValidateCredentials func doc ...
+type ValidateCredentials func(string, string) bool
+
+// CustomTokenValidatorFunc doc ...
+var CustomTokenValidatorFunc core.CustomTokenValidator
+
+// ValidateCredentialsFunc doc ...
+var ValidateCredentialsFunc ValidateCredentials = validateCredentials
