@@ -33,53 +33,30 @@ var (
 // which will be the result of chaining the ones received as parameters
 var MiddlewaresChain = core.MiddlewaresChain
 
-// ValidateBasicToken middleware ...
-func ValidateBasicToken(next http.HandlerFunc) http.HandlerFunc {
-	return func(w http.ResponseWriter, r *http.Request) {
-		auth := strings.SplitN(r.Header.Get("Authorization"), " ", 2)
-		if len(auth) != 2 || auth[0] != "Basic" {
-			Error{
-				Title:      DefaultUnauthorizedTitle,
-				Message:    DefaultInvalidAuthHeaderMsg,
-				StatusCode: http.StatusUnauthorized,
-			}.Send(w)
-			return
-		}
-		if api.ValidateBasicToken(auth[1]) {
-			Error{
-				Title:      DefaultUnauthorizedTitle,
-				Message:    DefaultBasicUnauthorizedMsg,
-				StatusCode: http.StatusUnauthorized,
-			}.Send(w)
-			return
-		}
-		next(w, r)
-	}
-}
-
-// ValidateBearerToken middleware ...
-func ValidateBearerToken(next http.HandlerFunc) http.HandlerFunc {
-	return func(w http.ResponseWriter, r *http.Request) {
-		auth := strings.SplitN(r.Header.Get("Authorization"), " ", 2)
-		if len(auth) != 2 || auth[0] != "Bearer" {
-			Error{
-				Title:      DefaultUnauthorizedTitle,
-				Message:    DefaultInvalidAuthHeaderMsg,
-				StatusCode: http.StatusUnauthorized,
-			}.Send(w)
-			return
-		}
-		if api.ValidateBearerToken(auth[1]) {
-			Error{
-				Title:      DefaultUnauthorizedTitle,
-				Message:    DefaultCustomUnauthorizedMsg,
-				StatusCode: http.StatusUnauthorized,
-			}.Send(w)
-			return
-		}
-		next(w, r)
-	}
-}
+// // ValidateBasicToken middleware ...
+// func ValidateBasicToken(next http.HandlerFunc) http.HandlerFunc {
+// 	return func(w http.ResponseWriter, r *http.Request) {
+// 		auth := strings.SplitN(r.Header.Get("Authorization"), " ", 2)
+// 		if len(auth) != 2 || auth[0] != "Basic" {
+// 			Error{
+// 				Title:      DefaultUnauthorizedTitle,
+// 				Message:    DefaultInvalidAuthHeaderMsg,
+// 				StatusCode: http.StatusUnauthorized,
+// 			}.Send(w)
+// 			return
+// 		}
+// 		id, secret, tokenValid := api.Validate(auth[1])
+// 		if !tokenValid {
+// 			Error{
+// 				Title:      DefaultUnauthorizedTitle,
+// 				Message:    DefaultBasicUnauthorizedMsg,
+// 				StatusCode: http.StatusUnauthorized,
+// 			}.Send(w)
+// 			return
+// 		}
+// 		next(w, r)
+// 	}
+// }
 
 // ValidateCustomToken middleware ...
 func ValidateCustomToken(next http.HandlerFunc) http.HandlerFunc {
@@ -93,7 +70,8 @@ func ValidateCustomToken(next http.HandlerFunc) http.HandlerFunc {
 			}.Send(w)
 			return
 		}
-		if validateCustomToken(auth[1]) {
+		tokenInfo, tokenValid := validateCustomToken(auth[1])
+		if !tokenValid {
 			Error{
 				Title:      DefaultUnauthorizedTitle,
 				Message:    DefaultBearerUnauthorizedMsg,
@@ -101,6 +79,8 @@ func ValidateCustomToken(next http.HandlerFunc) http.HandlerFunc {
 			}.Send(w)
 			return
 		}
+		buf, _ := tokenInfo.MarshalJSON()
+		r.Header.Set("TokenInfo", string(buf))
 		next(w, r)
 	}
 }
