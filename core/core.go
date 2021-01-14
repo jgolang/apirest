@@ -17,6 +17,7 @@ type API struct {
 	requestValidator APIRequestValidater
 	formatter        APIResponseFormatter
 	responder        APIResponder
+	security         APISecurity
 	MapMethods       *MapMethods
 }
 
@@ -44,9 +45,29 @@ func (api *API) RegisterNewAPIResponder(r APIResponder) {
 	api.responder = r
 }
 
+// ValidateBasicToken doc ...
+func (api *API) ValidateBasicToken(token string) bool {
+	return api.security.ValidateBasicToken(token)
+}
+
+// ValidateBearerToken doc ...
+func (api *API) ValidateBearerToken(token string) bool {
+	return api.security.ValidateBearerToken(token)
+}
+
+// ValidateCustomToken doc ...
+func (api *API) ValidateCustomToken(customValidator func(string) bool) bool {
+	return api.security.ValidateCustomToken(customValidator)
+}
+
 // RegisterNewAPIRequestValidator doc ...
 func (api *API) RegisterNewAPIRequestValidator(v APIRequestValidater) {
 	api.requestValidator = v
+}
+
+// RegisterNewAPISecurity doc ...
+func (api *API) RegisterNewAPISecurity(s APISecurity) {
+	api.security = s
 }
 
 // AddMapMethod doc ...

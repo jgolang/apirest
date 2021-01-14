@@ -1,5 +1,8 @@
 package core
 
+// ResponseType contains all the response types identiers
+type ResponseType string
+
 // ResponseFormatted ...
 type ResponseFormatted struct {
 	Headers    map[string]string
@@ -30,6 +33,3 @@ func (data *ResponseData) AddAdditionalInfo(key, value string) {
 func (data *ResponseData) AddHeader(key, value string) {
 	data.Headers[key] = value
 }
-
-// ResponseType contains all the response types identiers
-type ResponseType string
