@@ -9,20 +9,6 @@ import (
 	"github.com/jgolang/log"
 )
 
-var (
-	// Username doc ...
-	Username = "test"
-	// Password doc ...
-	Password = "test"
-)
-
-func validate(username, password string) bool {
-	if username == Username && password == Password {
-		return true
-	}
-	return false
-}
-
 // GetHeaderValueString doc ...
 func GetHeaderValueString(key string, r *http.Request) (string, Response) {
 	value, err := api.GetHeaderValueString(key, r)

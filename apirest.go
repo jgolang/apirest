@@ -31,6 +31,7 @@ var api = core.New(
 	RequestValidator{},
 	ResponseFormatter{},
 	Responder{},
+	&Security{},
 	&mapMethods,
 )
 
