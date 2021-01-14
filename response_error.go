@@ -20,24 +20,18 @@ type Error core.ResponseData
 
 // Send ...
 func (err Error) Send(w http.ResponseWriter) {
-
 	err.ResponseType = ErrorType
-
 	if err.Title == "" {
 		err.Title = DefaultErrorTitle
 	}
-
 	if err.Message == "" {
 		err.Message = DefaultErrorMessage
 	}
-
 	if err.StatusCode == 0 {
 		err.StatusCode = http.StatusBadRequest
 	}
-
 	if err.ErrorCode == "" {
 		err.ErrorCode = "1"
 	}
-
 	api.Respond(core.ResponseData(err), w)
 }

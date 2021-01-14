@@ -20,21 +20,15 @@ type Success core.ResponseData
 
 // Send ...
 func (success Success) Send(w http.ResponseWriter) {
-
 	success.ResponseType = SuccessType
-
 	if success.Title == "" {
 		success.Title = DefaultSuccessTitle
 	}
-
 	if success.Message == "" {
 		success.Message = DefaultSuccessMessage
 	}
-
 	if success.StatusCode == 0 {
 		success.StatusCode = http.StatusOK
 	}
-
 	api.Respond(core.ResponseData(success), w)
-
 }

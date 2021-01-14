@@ -1,5 +1,10 @@
 package apirest
 
+import (
+	"encoding/base64"
+	"strings"
+)
+
 var (
 	// Username doc ...
 	Username = "test"
@@ -11,9 +16,16 @@ var (
 type Security struct {
 }
 
+// CustomTokenValidatorFunc doc ...
+var CustomTokenValidatorFunc func(string) bool
+
 // ValidateBasicToken doc ...
 func (s *Security) ValidateBasicToken(token string) bool {
-
+	payload, _ := base64.StdEncoding.DecodeString(token)
+	pair := strings.SplitN(string(payload), ":", 2)
+	if len(pair) != 2 || !validate(pair[0], pair[1]) {
+		return false
+	}
 	return true
 }
 
@@ -24,8 +36,8 @@ func (s *Security) ValidateBearerToken(token string) bool {
 }
 
 // ValidateCustomToken doc ...
-func (s *Security) ValidateCustomToken(validator func(string) bool) bool {
-	return validator("")
+func (s *Security) ValidateCustomToken(token string, validator func(string) bool) bool {
+	return validator(token)
 }
 
 func validate(username, password string) bool {
@@ -33,4 +45,8 @@ func validate(username, password string) bool {
 		return true
 	}
 	return false
+}
+
+func validateCustomToken(token string) bool {
+	return api.ValidateCustomToken(token, CustomTokenValidatorFunc)
 }

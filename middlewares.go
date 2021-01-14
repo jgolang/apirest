@@ -2,7 +2,6 @@ package apirest
 
 import (
 	"bytes"
-	"encoding/base64"
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
@@ -15,22 +14,91 @@ import (
 	"github.com/jgolang/log"
 )
 
+var (
+	// DefaultInvalidAuthHeaderMsg doc ..
+	DefaultInvalidAuthHeaderMsg = "Invalid Authorization header!"
+	// DefaultUnauthorizedTitle doc ...
+	DefaultUnauthorizedTitle = "Unauthorized!"
+	// DefaultBasicUnauthorizedMsg doc ..
+	DefaultBasicUnauthorizedMsg = "Invalid basic token"
+	// DefaultBearerUnauthorizedMsg doc ...
+	DefaultBearerUnauthorizedMsg = "Invalid bearer token"
+	// CutomTokenPrefix doc...
+	CutomTokenPrefix = "Bearer"
+	// DefaultCustomUnauthorizedMsg doc ...
+	DefaultCustomUnauthorizedMsg = fmt.Sprintf("Invalid %v token", CutomTokenPrefix)
+)
+
 // MiddlewaresChain provides syntactic sugar to create a new middleware
 // which will be the result of chaining the ones received as parameters
 var MiddlewaresChain = core.MiddlewaresChain
 
-// BasicAuth ...
-func BasicAuth(next http.HandlerFunc) http.HandlerFunc {
+// ValidateBasicToken middleware ...
+func ValidateBasicToken(next http.HandlerFunc) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		auth := strings.SplitN(r.Header.Get("Authorization"), " ", 2)
 		if len(auth) != 2 || auth[0] != "Basic" {
-			Error{Title: "Unauthorized!", StatusCode: 401}.Send(w)
+			Error{
+				Title:      DefaultUnauthorizedTitle,
+				Message:    DefaultInvalidAuthHeaderMsg,
+				StatusCode: http.StatusUnauthorized,
+			}.Send(w)
 			return
 		}
-		payload, _ := base64.StdEncoding.DecodeString(auth[1])
-		pair := strings.SplitN(string(payload), ":", 2)
-		if len(pair) != 2 || !validate(pair[0], pair[1]) {
-			Error{Title: "Unauthorized!", StatusCode: 401}.Send(w)
+		if api.ValidateBasicToken(auth[1]) {
+			Error{
+				Title:      DefaultUnauthorizedTitle,
+				Message:    DefaultBasicUnauthorizedMsg,
+				StatusCode: http.StatusUnauthorized,
+			}.Send(w)
+			return
+		}
+		next(w, r)
+	}
+}
+
+// ValidateBearerToken middleware ...
+func ValidateBearerToken(next http.HandlerFunc) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		auth := strings.SplitN(r.Header.Get("Authorization"), " ", 2)
+		if len(auth) != 2 || auth[0] != "Bearer" {
+			Error{
+				Title:      DefaultUnauthorizedTitle,
+				Message:    DefaultInvalidAuthHeaderMsg,
+				StatusCode: http.StatusUnauthorized,
+			}.Send(w)
+			return
+		}
+		if api.ValidateBearerToken(auth[1]) {
+			Error{
+				Title:      DefaultUnauthorizedTitle,
+				Message:    DefaultCustomUnauthorizedMsg,
+				StatusCode: http.StatusUnauthorized,
+			}.Send(w)
+			return
+		}
+		next(w, r)
+	}
+}
+
+// ValidateCustomToken middleware ...
+func ValidateCustomToken(next http.HandlerFunc) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		auth := strings.SplitN(r.Header.Get("Authorization"), " ", 2)
+		if len(auth) != 2 || auth[0] != CutomTokenPrefix {
+			Error{
+				Title:      DefaultUnauthorizedTitle,
+				Message:    DefaultInvalidAuthHeaderMsg,
+				StatusCode: http.StatusUnauthorized,
+			}.Send(w)
+			return
+		}
+		if validateCustomToken(auth[1]) {
+			Error{
+				Title:      DefaultUnauthorizedTitle,
+				Message:    DefaultBearerUnauthorizedMsg,
+				StatusCode: http.StatusUnauthorized,
+			}.Send(w)
 			return
 		}
 		next(w, r)

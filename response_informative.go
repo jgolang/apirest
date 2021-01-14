@@ -20,20 +20,15 @@ type Informative core.ResponseData
 
 // Send ...
 func (info Informative) Send(w http.ResponseWriter) {
-
 	info.ResponseType = InformativeType
-
 	if info.Title == "" {
 		info.Title = DefaultInfoTitle
 	}
-
 	if info.Message == "" {
 		info.Message = DefaultInfoMessage
 	}
-
 	if info.StatusCode == 0 {
 		info.StatusCode = http.StatusOK
 	}
-
 	api.Respond(core.ResponseData(info), w)
 }
