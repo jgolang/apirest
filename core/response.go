@@ -16,5 +16,5 @@ type APIResponder interface {
 type APISecurity interface {
 	ValidateBasicToken(token string) bool
 	ValidateBearerToken(token string) bool
-	ValidateCustomToken(func(string) bool) bool
+	ValidateCustomToken(token string, validator func(string) bool) bool
 }

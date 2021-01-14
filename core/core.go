@@ -57,8 +57,8 @@ func (api *API) ValidateBearerToken(token string) bool {
 }
 
 // ValidateCustomToken doc ...
-func (api *API) ValidateCustomToken(customValidator func(string) bool) bool {
-	return api.security.ValidateCustomToken(customValidator)
+func (api *API) ValidateCustomToken(token string, customValidator func(string) bool) bool {
+	return api.security.ValidateCustomToken(token, customValidator)
 }
 
 // RegisterNewAPIRequestValidator doc ...
