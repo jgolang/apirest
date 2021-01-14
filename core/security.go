@@ -6,7 +6,7 @@ import (
 
 // APISecurity doc ...
 type APISecurity interface {
-	ValidateBasicToken(token string) (id, secret string, valid bool)
+	ValidateBasicToken(token string) (client, secret string, valid bool)
 	ValidateCustomToken(token string, validator CustomTokenValidator) (json.RawMessage, bool)
 }
 

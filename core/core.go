@@ -54,6 +54,11 @@ func (api *API) ValidateCustomToken(token string, customValidator CustomTokenVal
 	return api.security.ValidateCustomToken(token, customValidator)
 }
 
+// ValidateBasicToken doc ...
+func (api *API) ValidateBasicToken(token string) (client, secret string, valid bool) {
+	return api.security.ValidateBasicToken(token)
+}
+
 // RegisterNewAPIRequestValidator doc ...
 func (api *API) RegisterNewAPIRequestValidator(v APIRequestValidater) {
 	api.requestValidator = v
