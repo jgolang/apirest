@@ -35,7 +35,7 @@ func (err Error) Send(w http.ResponseWriter) {
 		err.StatusCode = http.StatusBadRequest
 	}
 
-	if err.ErrorCode == "0" {
+	if err.ErrorCode == "" {
 		err.ErrorCode = "1"
 	}
 
