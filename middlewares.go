@@ -33,8 +33,8 @@ var (
 // which will be the result of chaining the ones received as parameters
 var MiddlewaresChain = core.MiddlewaresChain
 
-// ValidateBasicToken middleware ...
-func ValidateBasicToken(next http.HandlerFunc) http.HandlerFunc {
+// BasicToken validate basic authentication token middleware ...
+func BasicToken(next http.HandlerFunc) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		auth := strings.SplitN(r.Header.Get("Authorization"), " ", 2)
 		if len(auth) != 2 || auth[0] != "Basic" {
@@ -60,8 +60,8 @@ func ValidateBasicToken(next http.HandlerFunc) http.HandlerFunc {
 	}
 }
 
-// ValidateCustomToken middleware ...
-func ValidateCustomToken(next http.HandlerFunc) http.HandlerFunc {
+// CustomToken middleware ...
+func CustomToken(next http.HandlerFunc) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		auth := strings.SplitN(r.Header.Get("Authorization"), " ", 2)
 		if len(auth) != 2 || auth[0] != CutomTokenPrefix {
@@ -72,7 +72,7 @@ func ValidateCustomToken(next http.HandlerFunc) http.HandlerFunc {
 			}.Send(w)
 			return
 		}
-		tokenInfo, tokenValid := validateCustomToken(auth[1])
+		tokenInfo, tokenValid := ValidateCustomToken(auth[1])
 		if !tokenValid {
 			Error{
 				Title:      DefaultUnauthorizedTitle,

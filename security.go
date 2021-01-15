@@ -42,7 +42,8 @@ func validateCredentials(username, password string) bool {
 	return false
 }
 
-func validateCustomToken(token string) (json.RawMessage, bool) {
+// ValidateCustomToken doc ...
+func ValidateCustomToken(token string) (json.RawMessage, bool) {
 	return api.ValidateCustomToken(token, CustomTokenValidatorFunc)
 }
 
@@ -54,3 +55,8 @@ var CustomTokenValidatorFunc core.CustomTokenValidator
 
 // ValidateBasicAuthCredentialsFunc define custom function for validate basic authenteication credential
 var ValidateBasicAuthCredentialsFunc ValidateCredentials = validateCredentials
+
+// ValidateBasicToken doc ...
+func ValidateBasicToken(token string) (client, secret string, valid bool) {
+	return api.ValidateBasicToken(token)
+}
