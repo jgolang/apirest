@@ -24,7 +24,7 @@ type Security struct{}
 func (s *Security) ValidateBasicToken(token string) (client, secret string, valid bool) {
 	payload, _ := base64.StdEncoding.DecodeString(token)
 	pair := strings.SplitN(string(payload), ":", 2)
-	if len(pair) != 2 || !ValidateCredentialsFunc(pair[0], pair[1]) {
+	if len(pair) != 2 || !ValidateBasicAuthCredentialsFunc(pair[0], pair[1]) {
 		return "", "", false
 	}
 	return pair[0], pair[1], true
@@ -49,8 +49,8 @@ func validateCustomToken(token string) (json.RawMessage, bool) {
 // ValidateCredentials func doc ...
 type ValidateCredentials func(string, string) bool
 
-// CustomTokenValidatorFunc doc ...
+// CustomTokenValidatorFunc define custom function to validate custom token
 var CustomTokenValidatorFunc core.CustomTokenValidator
 
-// ValidateCredentialsFunc doc ...
-var ValidateCredentialsFunc ValidateCredentials = validateCredentials
+// ValidateBasicAuthCredentialsFunc define custom function for validate basic authenteication credential
+var ValidateBasicAuthCredentialsFunc ValidateCredentials = validateCredentials
