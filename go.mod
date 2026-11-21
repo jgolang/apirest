@@ -1,3 +1,4 @@
+// Deprecated: use github.com/jgolang/api instead. apirest is no longer maintained.
 module github.com/jgolang/apirest
 
 go 1.15
